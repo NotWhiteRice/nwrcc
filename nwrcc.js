@@ -26,7 +26,7 @@ var init = function() {
                 var dialog = confirm('AutoCookie ' + version + ' was created for Cookie Clicker ' + version +
                                      '. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?');
                 if(!dialog) return;
-                preset = "this warning cannot be disabled as of yet.";
+                //preset = "this warning cannot be disabled as of yet.";
                 Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
             } else Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = true;
             Game.Notify('Injecting AutoCookie... ' + preset, '', [19, 1]);
