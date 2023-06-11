@@ -72,21 +72,20 @@ AutoCookie.onCheck = function() {
                     if(!Game.HasAchiev("Stifling the press")) {
                         window.resizeTo(899, (height > 300 ? height : 300));
                         Game.tickerL.click();
-                        }
-                        if(!Game.HasAchiev("Cookie-dunker")) {
-                            window.resizeTo(width, 25);
-                            let counter = 0;
-                            const interval = setInterval(() => {
-                                if(counter == 1) window.resizeTo(width, height);
-                                counter++;
-                                if(counter == 1) clearInterval(interval);
-                            }, 10000);
-                        }
                     }
-                } else if(!this.sizeWarning) {
-                    Game.Notify('"Cookie-dunker" and "Stifling the press" must be done manually.', 'These achievements are only "automatic" on Steam', [1, 7]);
-                    this.sizeWarning = true;
+                    if(!Game.HasAchiev("Cookie-dunker")) {
+                        window.resizeTo(width, 25);
+                        let counter = 0;
+                        const interval = setInterval(() => {
+                            if(counter == 1) window.resizeTo(width, height);
+                            counter++;
+                            if(counter == 1) clearInterval(interval);
+                        }, 10000);
+                    }
                 }
+            } else if(!this.sizeWarning) {
+                Game.Notify('"Cookie-dunker" and "Stifling the press" must be done manually.', 'These achievements are only "automatic" on Steam', [1, 7]);
+                this.sizeWarning = true;
             }
         }
     }
