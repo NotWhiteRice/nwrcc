@@ -55,7 +55,7 @@ AutoCookie.onCheck = function() {
             if(platform == "steam") {
                 if(screen.availWidth == window.outerWidth) {
                     if(!sizeWarning) {
-                        Game.Notify("Please unmaximize your window", "This need be fixed later", [13, 6]);
+                        Game.Notify("Please unmaximize your window", "This need be fixed later", [32, 1]);
                         sizeWarning = true;
                     }
                 } else {
@@ -77,7 +77,7 @@ AutoCookie.onCheck = function() {
                     }
                 }
             } else if(!sizeWarning) {
-                Game.Notify('"Cookie-dunker" and "Stifling the press" must be done manually.', 'These achievements are only "automatic" on Steam', [1, 7]);
+                Game.Notify('"Cookie-dunker" and "Stifling the press" must be done manually.', 'These achievements are only "automatic" on Steam', [35, 0]);
                 sizeWarning = true;
             }
         }

@@ -12,7 +12,6 @@ var imports = [
 ];
 
 AutoCookie.ILoad = setInterval(() => {
-    Game.Notify("Test", "test", [16,5]);
     if(Game && Game.ready) {
         clearInterval(AutoCookie.ILoad);
         AutoCookie.ILoad = 0;
