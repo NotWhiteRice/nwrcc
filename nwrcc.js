@@ -105,11 +105,8 @@ function registerMod(modID = "nwrcc") {
         init: function() {
             instance = new Instance;
             ICookie = setInterval(AutoCookie.clickCookie, 1000/AutoCookie.config.clicksPerSec);
-            console.log("pre logic");
             Game.registerHook("logic", AutoCookie.onLogic);
-            console.log("after logic");
             Game.registerHook("check", AutoCookie.onCheck);
-            console.log("after check");
             Game.registerHook("reset", AutoCookie.onReset);
         },
         save: function() {
