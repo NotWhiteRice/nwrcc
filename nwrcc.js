@@ -22,8 +22,8 @@ var init = function() {
             mismatch = true;
             if(localStorage) ignoreMismatchFor = localStorage.getItem("nwrAutoCookie_IgnoreMismatchForVersion");
             if(ignoreMismatchFor !== Game.version + '|' + VERSION + '|' + REVISION) {
-                var dialog = confirm('AutoCookie ' + version + 'was created for Cookie Clicker ' + version +
-                                     '. Injecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?');
+                var dialog = confirm('AutoCookie ' + version + ' was created for Cookie Clicker ' + version +
+                                     '. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?');
                 if(!dialog) return;
                 Game.Notify('Injecting AutoCookie... this warning cannot be toggled as of yet');
                 Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
@@ -77,7 +77,7 @@ var init = function() {
         }
         Game.Win('Third-party');
     } catch(e) {
-        Game.Notify("Unable to inject AutoCookie...", e, [12, 27]);
+        Game.Notify('Unable to inject AutoCookie...', 'This will eventually show the error that had occured', [12, 27]);
         throw e;
     }
 }
