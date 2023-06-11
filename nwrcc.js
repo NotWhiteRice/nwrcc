@@ -54,16 +54,16 @@ AutoCookie.onCheck = function() {
         if(!Game.HasAchiev("Olden days")) {
             AutoCookie.config.miscAch = true;
             Game.ShowMenu("log");
-            if(this.platform == "steam") document.getElementsByClassName("inset")[1].childNodes[3].children[3].children[2].children[0].click();
+            if(platform == "steam") document.getElementsByClassName("inset")[1].childNodes[3].children[3].children[2].children[0].click();
             else document.getElementsByClassName("inset")[1].childNodes[3].children[3].children['oldenDays'].children[0].click();
         }
         if(!Game.HasAchiev("Stifling the press") || !Game.HasAchiev("Cookie-dunker")) {
-            if(this.platform == "steam") {
+            if(platform == "steam") {
                 AutoCookie.config.miscAch = true;
                 if(screen.availWidth == window.outerWidth) {
-                    if(!this.sizeWarning) {
+                    if(!sizeWarning) {
                         Game.Notify("Please unmaximize your window", "This need be fixed later", [13, 6]);
-                        this.sizeWarning = true;
+                        sizeWarning = true;
                     }
                 } else {
                     let width = window.outerWidth;
@@ -83,9 +83,9 @@ AutoCookie.onCheck = function() {
                         }, 10000);
                     }
                 }
-            } else if(!this.sizeWarning) {
+            } else if(!sizeWarning) {
                 Game.Notify('"Cookie-dunker" and "Stifling the press" must be done manually.', 'These achievements are only "automatic" on Steam', [1, 7]);
-                this.sizeWarning = true;
+                sizeWarning = true;
             }
         }
     }
