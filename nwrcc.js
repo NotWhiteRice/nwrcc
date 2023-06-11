@@ -27,39 +27,32 @@ AutoCookie.onLogic = function() {
 
 AutoCookie.onCheck = function() {
     if(AutoCookie.config.miscAch) {
-        AutoCookie.config.miscAch = false;
         if(!Game.HasAchiev("What's in a name")) {
-            AutoCookie.config.miscAch = true;
             Game.bakeryNamePrompt();
             document.getElementsByClassName("option focused")[0].click();
         }
         if(!Game.HasAchiev("Tabloid addiction")) {
-            AutoCookie.config.miscAch = true;
             const interval = setInterval(() => {
                 Game.tickerL.click();
                 if(Game.HasAchiev("Tabloid addiction")) clearInterval(interval);
             }, 1);
         }
         if(!Game.HasAchiev("Here you go")) {
-            AutoCookie.config.miscAch = true;
             Game.ShowMenu("stats");
             Game.Achievements["Here you go"].click();
             Game.ShowMenu("");
         }
         if(!Game.HasAchiev("Tiny cookie")) {
-            AutoCookie.config.miscAch = true;
             Game.ShowMenu("stats");
             document.getElementsByClassName("subsection")[0].children[1].children[0].children[1].children[0].click();
         }
         if(!Game.HasAchiev("Olden days")) {
-            AutoCookie.config.miscAch = true;
             Game.ShowMenu("log");
             if(platform == "steam") document.getElementsByClassName("inset")[1].childNodes[3].children[3].children[2].children[0].click();
             else document.getElementsByClassName("inset")[1].childNodes[3].children[3].children['oldenDays'].children[0].click();
         }
         if(!Game.HasAchiev("Stifling the press") || !Game.HasAchiev("Cookie-dunker")) {
             if(platform == "steam") {
-                AutoCookie.config.miscAch = true;
                 if(screen.availWidth == window.outerWidth) {
                     if(!sizeWarning) {
                         Game.Notify("Please unmaximize your window", "This need be fixed later", [13, 6]);
