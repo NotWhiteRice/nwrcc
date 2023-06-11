@@ -27,7 +27,7 @@ function loadImport(index) {
         var url = imports[index];
         if(/\.js$/.exec(url)) {
             $.getScript(url, () => {
-                loadInport(index + 1);
+                loadImport(index + 1);
             });
         } else {
             Game.Notify("Unable to import script...", url, [32, 0]);
