@@ -95,6 +95,14 @@ AutoCookie.onReset = function(isHard) {
     if(isHard) sizeWarning = false;
 };
 
+function isAutoclickOn() {
+    if(!AutoCookie.config.autoclick) return false;
+    if(!AutoCookie.config.neverclick) return true;
+    if(Game.ascensionMode != 1 && Game.resets != 0) return true;
+    AutoCookie.config.neverclick = !Game.HasAchiev("Neverclick") || (AutoCookie.config.shadowAch && !Game.HasAchiev("True Neverclick"));
+    return !AutoCookie.config.neverclick;
+}
+
 AutoCookie.clickCookie = function() {
     if(isAutoclickOn()) Game.ClickCookie();
 };
@@ -125,12 +133,4 @@ function registerMod(modID = "nwrcc") {
             });
         },
     })
-}
-
-function isAutoclickOn() {
-    if(!AutoCookie.config.autoclick) return false;
-    if(!AutoCookie.config.neverclick) return true;
-    if(Game.ascensionMode != 1 && Game.resets != 0) return true;
-    AutoCookie.config.neverclick = !Game.HasAchiev("Neverclick") || (AutoCookie.config.shadowAch && !Game.HasAchiev("True Neverclick"));
-    return !AutoCookie.config.neverclick;
 }
