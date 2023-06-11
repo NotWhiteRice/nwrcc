@@ -4,16 +4,16 @@ let instance;
 let ICookie;
 
 class Instance {
-    constructor() {
-        sync();
-    }
-
     sync() {
         this.cookiesEarned = Game.cookiesEarned;
         this.cps = Game.cookiesPs;
         this.bank = Game.cookies;
         this.totalBuildings = Game.BuildingsOwned;
         this.season = Game.season;
+    }
+
+    constructor() {
+        this.sync();
     }
 }
 
