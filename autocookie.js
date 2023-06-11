@@ -25,7 +25,6 @@ function loadImport(index) {
         registerMod();
     } else {
         var url = imports[index];
-        Game.Notify("Loading import...", url, [32,0]);
         if(/\.js$/.exec(url)) {
             $.getScript(url, () => {
                 loadInport(index + 1);
@@ -45,4 +44,5 @@ function nwrInit() {
     jquery.onload = function() {
         loadImport(0);
     }
+    document.head.appendChild(jquery);
 }
