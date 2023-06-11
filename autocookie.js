@@ -36,7 +36,6 @@ function loadImport(index) {
 
 function nwrInit() {
     var jquery = document.createElement("script");
-    jquery.setAttribute("type", "text/javascript");
     jquery.setAttribute("src", "https://code.jquery.com/jquery-3.7.0.min.js");
     jquery.setAttribute("integrity", "sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=");
     jquery.setAttribute("crossorigin", "anonymous");

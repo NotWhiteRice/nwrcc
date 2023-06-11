@@ -3,8 +3,6 @@ let sizeWarning = false;
 let instance;
 let ICookie;
 
-Game.Notify("Loaded nwrcc.js", "", [16, 5]);
-
 class Instance {
     constructor() {
         sync();
