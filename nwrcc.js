@@ -22,7 +22,8 @@ AutoCookie.onLogic = function() {
         Game.shimmers.forEach(function(shimmer) {
             if(!AutoCookie.config.miscAch || ((!Game.HasAchiev("Fading luck") && shimmer.life<Game.fps) || Game.shimmers.length > 1) || Game.HasAchiev("Fading luck"))
                 if(shimmer.type == "golden" || AutoCookie.config.clickWrath) shimmer.pop();
-});
+        });
+}
 
 AutoCookie.onCheck = function() {
     if(AutoCookie.config.miscAch) {
