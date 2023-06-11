@@ -1,6 +1,6 @@
 function injectAutoCookie() {
 
-var VERSION = "2.052";
+var VERSION = "2.022";
 var REVISION = "0";
 var DEVBUILD = "pre-alpha";
 
@@ -20,14 +20,16 @@ var init = function() {
         var ignoreMismatchFor = null;
         if(Game.version != VERSION) {
             mismatch = true;
+            var preset = "the version mismatch warning was disabled by user settings";
             if(localStorage) ignoreMismatchFor = localStorage.getItem("nwrAutoCookie_IgnoreMismatchForVersion");
             if(ignoreMismatchFor !== Game.version + '|' + VERSION + '|' + REVISION) {
                 var dialog = confirm('AutoCookie ' + version + ' was created for Cookie Clicker ' + version +
                                      '. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?');
                 if(!dialog) return;
-                Game.Notify('Injecting AutoCookie... this warning cannot be toggled as of yet', '', [19, 1]);
+                preset = "this warning cannot be disabled as of yet.";
                 Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
             } else Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = true;
+            Game.Notify('Injecting AutoCookie... ' + preset, '', [19, 1]);
         } else if(localStorage) {
             Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
             if(localStorage) localStorage.removeItem('nwrAutoCookie_IgnoreMismatchForVersion');
