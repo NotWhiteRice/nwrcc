@@ -25,7 +25,7 @@ var init = function() {
                 var dialog = confirm('AutoCookie ' + version + ' was created for Cookie Clicker ' + version +
                                      '. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?');
                 if(!dialog) return;
-                Game.Notify('Injecting AutoCookie... this warning cannot be toggled as of yet');
+                Game.Notify('Injecting AutoCookie... this warning cannot be toggled as of yet', '', [19, 1]);
                 Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
             } else Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = true;
         } else if(localStorage) {
@@ -78,7 +78,7 @@ var init = function() {
         Game.Win('Third-party');
     } catch(e) {
         Game.Notify('Unable to inject AutoCookie...', 'This will eventually show the error that had occured', [12, 27]);
-        console.log(e);
+        throw e;
     }
 }
 
