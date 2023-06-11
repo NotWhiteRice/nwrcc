@@ -78,7 +78,7 @@ var init = function() {
         Game.Win('Third-party');
     } catch(e) {
         Game.Notify('Unable to inject AutoCookie...', 'This will eventually show the error that had occured', [12, 27]);
-        throw e;
+        console.log(e);
     }
 }
 
