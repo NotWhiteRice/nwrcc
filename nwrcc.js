@@ -1,6 +1,6 @@
 function injectAutoCookie() {
 
-var VERSION = "2.022";
+var VERSION = "2.052";
 var REVISION = "0";
 var DEVBUILD = "pre-alpha";
 
