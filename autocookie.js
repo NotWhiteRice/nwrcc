@@ -3,11 +3,9 @@ if(Game.version > ccVersion) Game.Notify("AutoCookie was made for an earlier ver
 
 var AutoCookie = {
     docs: "https://notwhiterice.github.io/nwrcc",
-    version: "v2.052.1",
 };
 
 var imports = [
-    AutoCookie.docs + "/config.js",
     AutoCookie.docs + "/nwrcc.js",
 ];
 
@@ -21,7 +19,7 @@ AutoCookie.ILoad = setInterval(() => {
 
 function loadImport(index) {
     if(index >= imports.length) {
-        registerMod("nwrcc");
+        injectAutoCookie();
     } else {
         var url = imports[index];
         if(/\.js$/.exec(url)) {

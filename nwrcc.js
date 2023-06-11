@@ -1,126 +1,89 @@
-let platform = typeof Steam == "undefined" ? "web" : "steam";
-let sizeWarning = false;
-let instance;
-let ICookie;
+function injectAutoCookie() {
 
-class Instance {
-    sync() {
-        this.cookiesEarned = Game.cookiesEarned;
-        this.cps = Game.cookiesPs;
-        this.bank = Game.cookies;
-        this.totalBuildings = Game.BuildingsOwned;
-        this.season = Game.season;
-    }
+var VERSION = "2.052";
+var REVISION = "0";
+var DEVBUILD = "pre-alpha";
 
-    constructor() {
-        this.sync();
-    }
-}
+var AutoCookie = undefined;
+var Game = window.Game;
 
-AutoCookie.onLogic = function() {
-    if(AutoCookie.config.autoGC)
-        Game.shimmers.forEach(function(shimmer) {
-            if(!AutoCookie.config.miscAch || ((!Game.HasAchiev("Fading luck") && shimmer.life<Game.fps) || Game.shimmers.length > 1) || Game.HasAchiev("Fading luck"))
-                if(shimmer.type == "golden" || AutoCookie.config.clickWrath) shimmer.pop();
-        });
-};
+var init = function() {
+    try {
+        var version = 'v' + VERSION + '.' + REVISION + '-' + DEVBUILD;
+        if(window.nwrAutoCookie != undefined && window.nwrAutoCookie.ready) {
+            Game.Notify("AutoCookie has already been injected...", window.nwrAutoCookie.version, [32, 0]);
+            return;
+        }
 
-AutoCookie.onCheck = function() {
-    if(AutoCookie.config.miscAch) {
-        if(!Game.HasAchiev("What's in a name")) {
-            Game.bakeryNamePrompt();
-            document.getElementsByClassName("option focused")[0].click();
+        // Handling version mismatch
+        var mismatch = false;
+        var ignoreMismatchFor = null;
+        if(Game.version != VERSION) {
+            mismatch = true;
+            if(localStorage) ignoreMismatchFor = localStorage.getItem("nwrAutoCookie_IgnoreMismatchForVersion");
+            if(ignoreMismatchFor !== Game.version + '|' + VERSION + '|' + REVISION) {
+                var dialog = confirm('AutoCookie ' + version + 'was created for Cookie Clicker ' + version +
+                                     '. Injecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?');
+                if(!dialog) return;
+                Game.Notify('Injecting AutoCookie... this warning cannot be toggled as of yet');
+                Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
+            } else Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = true;
+        } else if(localStorage) {
+            Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
+            if(localStorage) localStorage.removeItem('nwrAutoCookie_IgnoreMismatchForVersion');
         }
-        if(!Game.HasAchiev("Tabloid addiction")) {
-            const interval = setInterval(() => {
-                Game.tickerL.click();
-                if(Game.HasAchiev("Tabloid addiction")) clearInterval(interval);
-            }, 1);
-        }
-        if(!Game.HasAchiev("Here you go")) {
-            Game.ShowMenu("stats");
-            Game.Achievements["Here you go"].click();
-            Game.ShowMenu("");
-        }
-        if(!Game.HasAchiev("Tiny cookie")) {
-            Game.ShowMenu("stats");
-            document.getElementsByClassName("subsection")[0].children[1].children[0].children[1].children[0].click();
-        }
-        if(!Game.HasAchiev("Olden days")) {
-            Game.ShowMenu("log");
-            if(platform == "steam") document.getElementsByClassName("inset")[1].childNodes[3].children[3].children[2].children[0].click();
-            else document.getElementsByClassName("inset")[1].childNodes[3].children[3].children['oldenDays'].children[0].click();
-        }
-        if(!Game.HasAchiev("Stifling the press") || !Game.HasAchiev("Cookie-dunker")) {
-            if(platform == "steam") {
-                if(screen.availWidth == window.outerWidth) {
-                    if(!sizeWarning) {
-                        Game.Notify("Please unmaximize your window", "This need be fixed later", [32, 1]);
-                        sizeWarning = true;
-                    }
-                } else {
-                    let width = window.outerWidth;
-                    let height = window.outerHeight;
 
-                    if(!Game.HasAchiev("Stifling the press")) {
-                        window.resizeTo(899, (height > 300 ? height : 300));
-                        Game.tickerL.click();
-                    }
-                    if(!Game.HasAchiev("Cookie-dunker")) {
-                        window.resizeTo(width, 25);
-                        let counter = 0;
-                        const interval = setInterval(() => {
-                            if(counter == 1) window.resizeTo(width, height);
-                            counter++;
-                            if(counter == 1) clearInterval(interval);
-                        }, 10000);
+        // Creating AutoCookie
+        if(window.nwrAutoCookie === undefined) {
+            AutoCookie = {};
+            window.nwrAutoCookie = AutoCookie;
+        } else {
+            if(window.nwrAutoCookie.preloadHooks) {
+                var instance = {ccVersion: VERSION, revision: REVISION, devBuild: DEVBUILD, version: version};
+                for(var hook in window.nwrAutoCookie) {
+                    if(!hook(instance)) {
+                        Game.Notify('AutoCookie was unable to be injected due to the presense of another mod', '', [19, 0]);
+                        return;
                     }
                 }
-            } else if(!sizeWarning) {
-                Game.Notify('"Cookie-dunker" and "Stifling the press" must be done manually.', 'These achievements are only "automatic" on Steam', [35, 0]);
-                sizeWarning = true;
+            }
+
+            AutoCookie = window.nwrAutoCookie;
+        }
+
+        // Settings
+        AutoCookie.ready = true;
+        AutoCookie.ccVersion = VERSION;
+        AutoCookie.revision = REVISION;
+        AutoCookie.devBuild = DEVBUILD;
+        AutoCookie.version = version;
+        AutoCookie.foundMismatch = mismatch;
+
+        // Creating instance
+        // Installing AutoCookie
+
+        // Calling postload hooks
+        if(AutoCookie.postloadHooks) {
+            for(var i = 0; i < AutoCookie.postloadHooks.length; i++) {
+                (AutoCookie.postloadHooks[i])(AutoCookie);
             }
         }
+
+        var msg = 'AutoCookie ' + version + ' has successfully been injected.';
+        if(Game.prefs.popups) {
+            Game.Popup(msg);
+        } else {
+            Game.Notify(msg, '', [19, 2]);
+        }
+        Game.Win('Third-party');
+    } catch(e) {
+        Game.Notify("Unable to inject AutoCookie...", e, [12, 27]);
+        throw e;
     }
-};
-
-AutoCookie.onReset = function(isHard) {
-    if(isHard) sizeWarning = false;
-};
-
-function isAutoclickOn() {
-    if(!AutoCookie.config.autoclick) return false;
-    if(!AutoCookie.config.neverclick) return true;
-    if(Game.ascensionMode != 1 && Game.resets != 0) return true;
-    AutoCookie.config.neverclick = !Game.HasAchiev("Neverclick") || (AutoCookie.config.shadowAch && !Game.HasAchiev("True Neverclick"));
-    return !AutoCookie.config.neverclick;
 }
 
-AutoCookie.clickCookie = function() {
-    if(isAutoclickOn()) Game.ClickCookie();
-};
+// LoadScriptHook
+// genInstance
 
-function registerMod(modID = "nwrcc") {
-    Game.registerMod(modID, {
-        init: function() {
-            instance = new Instance;
-            ICookie = setInterval(AutoCookie.clickCookie, 1000/AutoCookie.config.clicksPerSec);
-            Game.registerHook("logic", AutoCookie.onLogic);
-            Game.registerHook("check", AutoCookie.onCheck);
-            Game.registerHook("reset", AutoCookie.onReset);
-        },
-        save: function() {
-            let data = {};
-            Object.keys(AutoCookie.config).forEach(function (option) {
-                data[option] = AutoCookie.config[option];
-            });
-            return JSON.stringify(data);
-        },
-        load: function(str) {
-            let data = JSON.parse(str||0);
-            Object.keys(data).forEach(function(option) {
-                AutoCookie.config[option] = data[option];
-            });
-        },
-    })
-}
+init();
+};
