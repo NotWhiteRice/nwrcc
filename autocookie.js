@@ -22,7 +22,7 @@ AutoCookie.ILoad = setInterval(() => {
 
 function loadImport(index) {
     if(index >= imports.length) {
-        registerMod();
+        registerMod("nwrcc");
     } else {
         var url = imports[index];
         if(/\.js$/.exec(url)) {
