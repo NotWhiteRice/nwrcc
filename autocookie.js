@@ -1,4 +1,4 @@
-var ccVersion = 2.032;
+var ccVersion = 2.052;
 if(Game.version > ccVersion) Game.Notify("AutoCookie was made for an earlier version of Cookie Clicker", "AutoCookie was created for v" + ccVersion, [12, 7]);
 
 var AutoCookie = {
