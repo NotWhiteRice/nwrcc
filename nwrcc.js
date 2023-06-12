@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.68";
+var REVISION = "0.69";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -69,17 +69,17 @@ var MenuWrapper = {
 function ACMenu() {
     AutoCookie.oldUpdateMenu();
     if(Game.onMenu == "stats") {
-        var reference = MenuHelper.getMenuReference("subsection", "General");
-        var subsection = MenuHelper.createElement("div", reference.parentNode, "subsection", "", "", reference);
-        MenuHelper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
-        MenuHelper.createStatistic(subsection, "Version", AutoCookie.version);
-        var gcStats = MenuHelper.createSection(subsection, "Long-term Golden Cookie Probabilities", "nwrGCStatsButton", "showGCStats");
+        var reference = MenuWrapper.getMenuReference("subsection", "General");
+        var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
+        MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
+        MenuWrapper.createStatistic(subsection, "Version", AutoCookie.version);
+        var gcStats = MenuWrapper.createSection(subsection, "Long-term Golden Cookie Probabilities", "nwrGCStatsButton", "showGCStats");
     } else if(Game.onMenu = "prefs") {
-        var reference = MenuHelper.getMenuReference("block", "Mods");
-        var block = MenuHelper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
-        var subsection = MenuHelper.createElement("div", block, "subsection", "padding:0px;");
-        MenuHelper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
-        var listing = MenuHelper.createElement("div", subsection, "listing");
+        var reference = MenuWrapper.getMenuReference("block", "Mods");
+        var block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
+        var subsection = MenuWrapper.createElement("div", block, "subsection", "padding:0px;");
+        MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
+        var listing = MenuWrapper.createElement("div", subsection, "listing");
     }
 }
 
