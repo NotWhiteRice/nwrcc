@@ -80,13 +80,12 @@ var init = function() {
             var preset = "the version mismatch warning has been previously disabled in user settings";
             if(localStorage) ignoreMismatchFor = localStorage.getItem("nwrAutoCookie_IgnoreMismatchForVersion");
             if(ignoreMismatchFor !== Game.version + '|' + VERSION + '|' + REVISION) {
-                var dialog = confirm('AutoCookie ' + version + ' was created for Cookie Clicker ' + version +
-                                     '. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?');
+                var dialog = confirm(`AutoCookie ${version} was created for Cookie Clicker ${version}. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?``);
                 if(!dialog) return;
                 preset = "this warning cannot be disabled as of yet.";
                 Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
             } else Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = true;
-            Game.Notify('Injecting AutoCookie... ' + preset, '', [19, 1]);
+            Game.Notify(`Injecting AutoCookie... ${preset}`, '', [19, 1]);
         } else if(localStorage) {
             Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
             if(localStorage) localStorage.removeItem('nwrAutoCookie_IgnoreMismatchForVersion');
@@ -129,7 +128,7 @@ var init = function() {
             }
         }
 
-        var msg = 'AutoCookie ' + version + ' has successfully been injected.';
+        var msg = `AutoCookie ${version} has successfully been injected.`;
         if(Game.prefs.popups) {
             Game.Popup(msg);
         } else {
