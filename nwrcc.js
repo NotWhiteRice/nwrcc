@@ -39,6 +39,7 @@ var MenuWrapper = {
     },
 
     createButton(parent, id, option, onText, offText, desc, dim = true) {
+        var label = AutoCookie.user[option] ? onText : offText;
         var button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
         button.setAttribute("onclick", `window.nwrAutoCookie.MenuWrapper.toggle(${option}, ${id}, ${onText}, ${offText}, 0, ${dim})`);
         this.createElement("label", parent, "", "", desc);
