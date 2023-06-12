@@ -10,7 +10,7 @@ var Game = window.Game;
 
 // Helper functions
 var MenuHelper = {
-    getMenuReference = function(classAttr, title) {
+    getMenuReference(classAttr, title) {
         var menu = document.getElementById("menu");
         var list = menu.getElementsByClassName(classAttr);
         for(var i = 0; i < list.length; i++) {
@@ -19,7 +19,7 @@ var MenuHelper = {
         }
     }
 
-    createElement = function(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
+    createElement(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
         var element = document.createElement(elem);
         if(classAttr != "") element.setAttribute("class", classAttr);
         if(style != "") element.setAttribute("style", style);
@@ -32,20 +32,20 @@ var MenuHelper = {
         return element;
     }
 
-    createStatistic = function(parent, statistic, value) {
+    createStatistic(parent, statistic, value) {
         var element = this.createElement("div", parent, "listing");
         this.createElement("b", parent, "", "", `${statistic}:`);
         element.append(` ${value}`);
     }
 
-    createButton = function(parent, id, func, label, desc) {
+    createButton(parent, id, func, label, desc) {
         var button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
         button.setAttribute("onclick", func);
         this.createElement("label", parent, "", "", desc);
         this.createElement("br", parent);
     }
 
-    toggle = function(option, id, on, off, invert = 0, dim = true) {
+    toggle(option, id, on, off, invert = 0, dim = true) {
         var button = document.getElementById(id);
         if(AutoCookie.user[option]) {
             button.innerHTML = off;
@@ -57,7 +57,7 @@ var MenuHelper = {
         if(dim) button.className = `smallFancyButton prefButton option${(AutoCookie.user[option] ^ invert) ? '' : ' off'}`;
     }
 
-    createSection = function(parent, title, buttonID, option) {
+    createSection(parent, title, buttonID, option) {
         var elem0 = this.createElement("div", parent, "title", "padding:0px 16px;opacity:0.7;font-size:17px;font-family:Kavoon,Georgia,serif;", `${title} `);
         this.createButton(elem0, buttonID, `MenuHelper.toggle(${option}, ${buttonID}, "Hide", "Show", '0', false)`, "Hide", "");
         var section = this.createElement("div", "parent", "subsection");
