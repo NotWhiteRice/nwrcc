@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.62";
+var REVISION = "0.64";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -101,7 +101,7 @@ var init = function() {
             var preset = "the version mismatch warning has been previously disabled in user settings";
             if(localStorage) ignoreMismatchFor = localStorage.getItem("nwrAutoCookie_IgnoreMismatchForVersion");
             if(ignoreMismatchFor !== Game.version + '|' + VERSION + '|' + REVISION) {
-                var dialog = confirm(`AutoCookie ${version} was created for Cookie Clicker ${version}. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?``);
+                var dialog = confirm(`AutoCookie ${version} was created for Cookie Clicker ${version}. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?`);
                 if(!dialog) return;
                 preset = "this warning cannot be disabled as of yet.";
                 Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
