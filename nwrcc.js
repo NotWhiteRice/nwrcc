@@ -1,64 +1,51 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "1.1";
+var REVISION = "0.50";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
 var Game = window.Game;
 
+// Helper functions
+function MenuWrapper() {}
+
+MenuWrapper.prototype.getMenuReference(class, title) {
+    var menu = document.getElementById("menu");
+    var list = menu.getElementsByClassName(class);
+    for(var i = 0; i < list.length; i++) {
+        var element = list[i].querySelector(".title");
+        if(element.textContent === title) return list[i];
+    }
+}
+
+MenuWrapper.prototype.createElement(elem, parent, class = "" , style = "", text = "", ref = "") {
+    var element = document.createElement(elem);
+    if(class != "") element.setAttribute("class", class);
+    if(style != "") element.setAttribute("style", style);
+    if(text != "") element.textContent = text;
+    if(ref.nextSibling == undefined) {
+        parent.appendChild(element);
+    } else {
+        parent.insertBefore(element, ref.nextSibling);
+    }
+    return element;
+}
+
+
 // Hooks
 function ACMenu() {
     AutoCookie.oldUpdateMenu();
     if(Game.onMenu == "stats") {
-        var reference;
+        var reference = MenuWrapper.getMenuReference("subsection", "General");
+        var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
+        MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
         {
-            var menu = document.getElementById("menu");
-            var list = menu.getElementsByClassName("subsection");
-            for(var i = 0; i < list.length; i++) {
-                var element = list[i].querySelector(".title");
-                if(element.textContent === "General") {
-                    reference = list[i];
-                    break;
-                }
-            }
+            var element = MenuWrapper.createElement("div", "listing", "", " ${AutoCookie.version}");
+            MenuWrapper.createElement("b", "", "", "Version:");
         }
-
-        var subsection = document.createElement("div");
-        {
-            subsection.setAttribute("class", "subsection");
-
-            var title = document.createElement("div");
-            title.setAttribute("class", "title");
-            title.setAttribute("style", "position:relative;");
-            title.textContent = "AutoCookie";
-            subsection.appendChild(title);
-
-            var version = document.createElement("div");
-            version.setAttribute("class", "listing");
-            {
-                var element = document.createElement("b");
-                element.textContent = "Version:";
-                version.appendChild(element);
-            }
-            version.append(" " + AutoCookie.version);
-            subsection.appendChild(version);
-        }
-
-        reference.parentNode.insertBefore(subsection, reference.nextSibling);
     } else if(Game.onMenu = "prefs") {
-        var reference;
-        {
-            var menu = document.getElementById("menu");
-            var list = menu.getElementsByClassName("block");
-            for(var i = 0; i < list.length; i++) {
-                var element = list[i].querySelector(".title");
-                if(element.textContent === "Mods") {
-                    reference = list[i];
-                    break;
-                }
-            }
-        }
+        var reference = getMenuReference("block", "Mods");
 
         var block = document.createElement("div");
         {
