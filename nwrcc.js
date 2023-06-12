@@ -12,6 +12,12 @@ var Game = window.Game;
 var Instance = {
     sync() {
         this.wrathOdds = Game.elderWrath/3;
+        this.estGCTime;
+        {
+            var max = Game.shimmerTypes.golden.maxTime;
+            var min = Game.shimmerTypes.golden.minTime;
+            estGCTime = min + Math.pow((3 * Math.pow(min, 5) + Math.pow(min, 6) - 15 * Math.pow(min, 4) * max + 30 * Math.pow(min, 3) * Math.pow(max, 2) - 30 * Math.pow(min, 2) * Math.pow(max, 3) + 15 * min * Math.pow(max, 4) - 3 * Math.pow(max, 5)), 1/6);
+        }
     }
 }
 var MenuWrapper = {
@@ -77,6 +83,7 @@ var MenuWrapper = {
 // Hooks
 function ACMenu() {
     AutoCookie.oldUpdateMenu();
+    AutoCookie.instance.sync();
     if(Game.onMenu == "stats") {
         var reference = MenuWrapper.getMenuReference("subsection", "General");
         var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
@@ -84,6 +91,7 @@ function ACMenu() {
         MenuWrapper.createStatistic(subsection, "Version", AutoCookie.version);
         var gcStats = MenuWrapper.createSection(subsection, "Golden Cookie statistics", "nwrGCStatsButton", "showGCStats");
         MenuWrapper.createStatistic(gcStats, "Wrath Cookie probability", AutoCookie.instance.wrathOdds);
+        MenuWrapper.createStatistic(gcStats, "Estimated time left", Math.max(0, AutoCookie.instance.estGCTime - Game.shimmerTypes.golden.time));
     } else if(Game.onMenu = "prefs") {
         var reference = MenuWrapper.getMenuReference("block", "Mods");
         var block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
