@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.65";
+var REVISION = "0.66";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -138,7 +138,7 @@ var init = function() {
         AutoCookie.version = version;
         AutoCookie.foundMismatch = mismatch;
         AutoCookie.user = {
-            showGCStats = true,
+            showGCStats: true,
         }
 
         // Creating instance
