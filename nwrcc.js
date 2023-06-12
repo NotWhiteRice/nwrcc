@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.69";
+var REVISION = "0.71";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -48,14 +48,14 @@ var MenuWrapper = {
 
     toggle(option, id, on, off, invert = 0, dim = true) {
         var button = document.getElementById(id);
-        if(AutoCookie.user[option]) {
+        if(window.nwrAutoCookie.user[option]) {
             button.innerHTML = off;
-            AutoCookie.user[option] = 0;
+            window.nwrAutoCookie.user[option] = 0;
         } else {
             button.innerHTML = on;
-            AutoCookie.user[option] = 1;
+            window.nwrAutoCookie.user[option] = 1;
         }
-        if(dim) button.className = `smallFancyButton prefButton option${(AutoCookie.user[option] ^ invert) ? '' : ' off'}`;
+        if(dim) button.className = `smallFancyButton prefButton option${(window.nwrAutoCookie.user[option] ^ invert) ? '' : ' off'}`;
     },
 
     createSection(parent, title, buttonID, option) {
