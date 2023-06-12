@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.85";
+var REVISION = "0.86";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -112,6 +112,7 @@ var Instance = {
                 if(odds[key] != temp[key]) isDone = false;
                 odds[key] = temp[key];
             }
+            console.log(isDone);
         }
 
         return odds;
