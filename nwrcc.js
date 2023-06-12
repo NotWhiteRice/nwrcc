@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.58";
+var REVISION = "0.59";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -47,8 +47,9 @@ function ACMenu() {
         var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
         MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
         {
-            var element = MenuWrapper.createElement("div", subsection, "listing", "", " ${AutoCookie.version}");
+            var element = MenuWrapper.createElement("div", subsection, "listing");
             MenuWrapper.createElement("b", element, "", "", "Version:");
+            element.append(` ${AutoCookie.version}`);
         }
     } else if(Game.onMenu = "prefs") {
         var reference = MenuWrapper.getMenuReference("block", "Mods");
