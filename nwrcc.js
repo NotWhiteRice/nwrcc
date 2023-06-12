@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.64";
+var REVISION = "0.65";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -137,15 +137,15 @@ var init = function() {
         AutoCookie.devBuild = DEVBUILD;
         AutoCookie.version = version;
         AutoCookie.foundMismatch = mismatch;
+        AutoCookie.user = {
+            showGCStats = true,
+        }
 
         // Creating instance
 
         // Installing AutoCookie
         AutoCookie.oldUpdateMenu = Game.UpdateMenu;
         Game.UpdateMenu = ACMenu;
-
-        // User config
-        AutoCookie.user.showGCStats = true;
 
         // Calling postload hooks
         if(AutoCookie.postloadHooks) {
