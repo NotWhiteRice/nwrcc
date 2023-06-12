@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.82";
+var REVISION = "0.83";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -90,13 +90,13 @@ var Instance = {
                     let label0 = keys1[key0];
                     let val0 = keys1.length - key0 - 1;
                     let exp0 = Math.pow(2, val0);
-                    let factor0 = label0 == "Frenzy" || label0 == "Lucky" || (i % (2 * exp) >= exp);
+                    let factor0 = label0 == "Frenzy" || label0 == "Lucky" || (i % (2 * exp0) >= exp0);
                     if(factor0) {
                         for(let key1 in keys1) {
                             let label1 = keys1[key1];
                             let val1 = keys1.length - key1 - 1;
                             let exp1 = Math.pow(2, val1);
-                            let factor1 = label1 != "Blab" && (label1 == "Frenzy" || label1 == "Lucky" || (i % (2 * exp) >= exp));
+                            let factor1 = label1 != "Blab" && (label1 == "Frenzy" || label1 == "Lucky" || (i % (2 * exp1) >= exp1));
                             temp[label0] += seeds[i] * odds[label1] * 0.2 / (bits + 2);
                             if(label0 != "Blab" && label0 == label1) continue;
                             temp[label0] += seeds[i] * odds[label1] * 0.8 / (bits + (factor1 ? 1 : 2));
