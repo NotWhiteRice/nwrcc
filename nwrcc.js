@@ -7,7 +7,6 @@ var DEVBUILD = "pre-alpha";
 var AutoCookie = undefined;
 var Game = window.Game;
 
-
 // Hooks
 function ACMenu() {
     AutoCookie.oldUpdateMenu();
@@ -76,6 +75,17 @@ function ACMenu() {
             title.setAttribute("style", "position:relative;");
             title.textContent = "AutoCookie";
             subsection.appendChild(title);
+
+            var menu = document.createElement("div");
+            menu.setAttribute("class", "listing");
+
+            var test = document.createElement("a");
+            test.setAttribute("class", "smallFancyButton prefButton option");
+            test.setAttribute("id", "testButton");
+            test.onclick = Game.Notify("*click*", "You pressed the button!", [9,0]);
+            test.textContent = "Click for a notification!";
+            menu.appendChild(test);
+            
         }
 
         if(reference.nextSibling == undefined) {
