@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.96";
+var REVISION = "0.97";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -350,9 +350,13 @@ var init = function() {
         }
 
         // Creating instance
+        console.log("before instance");
         AutoCookie.instance.registerBuildings();
+        console.log("done with buildings");
         AutoCookie.instance.registerUpgrades();
+        console.log("done with upgrades");
         AutoCookie.instance.sync();
+        console.log("done syncing with game");
 
         // Installing AutoCookie
         if(AutoCookie.MenuWrapper === undefined) AutoCookie.MenuWrapper = MenuWrapper;
