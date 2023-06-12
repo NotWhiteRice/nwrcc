@@ -26,25 +26,25 @@ function ACMenu() {
         }
 
         var subsection = document.createElement("div");
-        subsection.setAttribute("class", "subsection");
-
-        var title = document.createElement("div");
         {
+            subsection.setAttribute("class", "subsection");
+
+            var title = document.createElement("div");
             title.setAttribute("class", "title");
             title.setAttribute("style", "position:relative;");
             title.textContent = "AutoCookie";
-        }
-        subsection.appendChild(title);
+            subsection.appendChild(title);
 
-        var version = document.createElement("div");
-        {
+            var version = document.createElement("div");
             version.setAttribute("class", "listing");
-            var element = document.createElement("b");
-            element.textContent = "Version:";
-            version.appendChild(element);
+            {
+                var element = document.createElement("b");
+                element.textContent = "Version:";
+                version.appendChild(element);
+            }
             version.append(" " + AutoCookie.version);
+            subsection.appendChild(version);
         }
-        subsection.appendChild(version);
 
         reference.parentNode.insertBefore(subsection, reference.nextSibling);
     } else if(Game.onMenu = "prefs") {
@@ -59,6 +59,28 @@ function ACMenu() {
                     break;
                 }
             }
+        }
+
+        var block = document.createElement("div");
+        {
+            block.setAttribute("class", "block");
+            block.setAttribute("style", "padding:0px;margin:8px 4px;");
+
+            var subsection = document.createElement("div");
+            subsection.setAttribute("class", "subsection");
+            subsection.setAttribute("style", "padding:0px;");
+
+            var title = document.createElement("div");
+            title.setAttribute("class", "title");
+            title.setAttribute("style", "position:relative;");
+            title.textContent = "AutoCookie";
+            subsection.appendChild(title);
+        }
+
+        if(reference.nextSibling == undefined) {
+            reference.parentNode.appendChild(block);
+        } else {
+            reference.parentNode.insertBefore(block, reference.nextSibling);
         }
     }
 }
