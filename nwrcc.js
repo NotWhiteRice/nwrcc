@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0";
+var REVISION = "0.42";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -12,7 +12,19 @@ var Game = window.Game;
 function ACMenu() {
     AutoCookie.oldUpdateMenu();
     if(Game.onMenu == "stats") {
-        var reference = document.getElementsByClassName("subsection")[0];
+        var reference;
+        {
+            var menu = document.getElementById("menu");
+            var list = menu.getElementsByClassName("subsection");
+            for(var i = 0; i < list.length; i++) {
+                var element = list[i].querySelector("title");
+                if(element.textContent === "General") {
+                    reference = list[i];
+                    break;
+                }
+            }
+        }
+
         var subsection = document.createElement("div");
         subsection.setAttribute("class", "subsection");
 
@@ -33,6 +45,8 @@ function ACMenu() {
         subsection.appendChild(version);
 
         reference.parentNode.insertBefore(subsection, reference.nextSibling);
+    } else if(Game.onMenu = "prefs") {
+        var menu = document.getElementById("menu");
     }
 }
 
