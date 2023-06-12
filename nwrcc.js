@@ -60,7 +60,7 @@ var MenuHelper = {
     createSection(parent, title, buttonID, option) {
         var elem0 = this.createElement("div", parent, "title", "padding:0px 16px;opacity:0.7;font-size:17px;font-family:Kavoon,Georgia,serif;", `${title} `);
         this.createButton(elem0, buttonID, `MenuHelper.toggle(${option}, ${buttonID}, "Hide", "Show", '0', false)`, "Hide", "");
-        var section = this.createElement("div", "parent", "subsection");
+        var section = this.createElement("div", parent, "subsection");
         return section;
     },
 }
