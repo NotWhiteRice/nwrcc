@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.71";
+var REVISION = "0.72";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -41,7 +41,7 @@ var MenuWrapper = {
     createButton(parent, id, option, onText, offText, desc, dim = true) {
         var label = AutoCookie.user[option] ? onText : offText;
         var button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
-        button.setAttribute("onclick", `window.nwrAutoCookie.MenuWrapper.toggle(${option}, ${id}, ${onText}, ${offText}, 0, ${dim})`);
+        button.setAttribute("onclick", `window.nwrAutoCookie.MenuWrapper.toggle("${option}", ${id}, "${onText}", "${offText}", 0, ${dim})`);
         this.createElement("label", parent, "", "", desc);
         this.createElement("br", parent);
     },
