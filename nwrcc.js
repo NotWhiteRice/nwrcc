@@ -21,7 +21,7 @@ var Instance = {
         this.season = Game.season;
         this.totalBuildings = Game.BuildingsOwned;
         this.hasSugar = Game.canLumps();
-        this.gcOdds = calcGCOdds();
+        this.gcOdds = this.calcGCOdds();
     },
 
     calcGCOdds() {
