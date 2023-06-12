@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.44";
+var REVISION = "1.1";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -76,16 +76,16 @@ function ACMenu() {
             title.textContent = "AutoCookie";
             subsection.appendChild(title);
 
-            var menu = document.createElement("div");
-            menu.setAttribute("class", "listing");
-            subsection.appendChild(menu);
+            var listing = document.createElement("div");
+            listing.setAttribute("class", "listing");
+            subsection.appendChild(listing);
 
             var test = document.createElement("a");
             test.setAttribute("class", "smallFancyButton prefButton option");
             test.setAttribute("id", "testButton");
-            test.onclick = Game.Notify("*click*", "You pressed the button!", [9,0]);
+            test.onclick = "Game.Notify("*click*", "You pressed the button!", [9,0]);";
             test.textContent = "Click for a notification!";
-            menu.appendChild(test);
+            listing.appendChild(test);
 
         }
 
