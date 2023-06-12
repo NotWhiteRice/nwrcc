@@ -7,6 +7,24 @@ var DEVBUILD = "pre-alpha";
 var AutoCookie = undefined;
 var Game = window.Game;
 
+
+// Hooks
+function ACMenu() {
+    AutoCookie.oldUpdateMenu();
+    if(Game.onMenu == "stats") {
+        var subsection = document.createElement("div");
+        subsection.setAttribute("class", "subsection");
+        var title = document.createElement("div");
+        title.setAttribute("class", "title");
+        title.setAttribute("style", "position:relative;");
+        title.textContent = "AutoCookie by NotWhiteRice";
+
+        subsection.appendChild(title);
+        document.getElementsByClassName("subsection")[0].append(subsection);
+    }
+}
+
+
 var init = function() {
     try {
         var version = 'v' + VERSION + '.' + REVISION + '-' + DEVBUILD;
@@ -62,7 +80,8 @@ var init = function() {
         AutoCookie.foundMismatch = mismatch;
 
         // Creating instance
-        // Installing AutoCookie
+        AutoCookie.oldUpdateMenu = Game.UpdateMenu;
+        Game.UpdateMenu = ACMenu;
 
         // Calling postload hooks
         if(AutoCookie.postloadHooks) {
