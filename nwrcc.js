@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.56";
+var REVISION = "0.57";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -39,13 +39,14 @@ function ACMenu() {
     if(Game.onMenu == "stats") {
         var reference = MenuWrapper.getMenuReference("subsection", "General");
         var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
+        console.log(subsection);
         MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
         {
             var element = MenuWrapper.createElement("div", "listing", "", " ${AutoCookie.version}");
             MenuWrapper.createElement("b", "", "", "Version:");
         }
     } else if(Game.onMenu = "prefs") {
-        var reference = getMenuReference("block", "Mods");
+        var reference = MenuWrapper.getMenuReference("block", "Mods");
 
         var block = document.createElement("div");
         {
