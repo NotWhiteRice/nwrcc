@@ -112,7 +112,7 @@ var Instance = {
                 if(odds[key] != temp[key]) isDone = false;
                 odds[key] = temp[key];
             }
-            console.log(isDone);
+            console.log(odds);
         }
 
         return odds;
