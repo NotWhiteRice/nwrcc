@@ -83,7 +83,7 @@ function ACMenu() {
             var test = document.createElement("a");
             test.setAttribute("class", "smallFancyButton prefButton option");
             test.setAttribute("id", "testButton");
-            test.onclick = "Game.Notify("*click*", "You pressed the button!", [9,0]);";
+            test.onclick = 'Game.Notify("*click*", "You pressed the button!", [9,0]);';
             test.textContent = "Click for a notification!";
             listing.appendChild(test);
 
