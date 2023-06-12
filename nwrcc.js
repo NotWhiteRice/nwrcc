@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.88";
+var REVISION = "0.90";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -188,8 +188,10 @@ function ACMenu() {
         MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
         MenuWrapper.createStatistic(subsection, "Version", AutoCookie.version);
         let gcStats = MenuWrapper.createSection(subsection, "Golden Cookie statistics", "nwrGCStatsButton", "showGCStats");
-        MenuWrapper.createStatistic(gcStats, "Estimated time left", Game.shimmers.length > 0 ? "---" : Math.max(0, Math.ceil((AutoCookie.instance.estGCTime - Game.shimmerTypes.golden.time) / 30)));
-        for(let i in AutoCookie.instance.gcOdds) MenuWrapper.createStatistic(gcStats, i, `${(AutoCookie.instance.gcOdds[i] * 100).toFixed(4)}%`);
+        if(AutoCookie.user.showGCStats) {
+            MenuWrapper.createStatistic(gcStats, "Estimated time left", Game.shimmers.length > 0 ? "---" : Math.max(0, Math.ceil((AutoCookie.instance.estGCTime - Game.shimmerTypes.golden.time) / 30)));
+            for(let i in AutoCookie.instance.gcOdds) MenuWrapper.createStatistic(gcStats, i, `${(AutoCookie.instance.gcOdds[i] * 100).toFixed(4)}%`);
+        }
     } else if(Game.onMenu = "prefs") {
         let reference = MenuWrapper.getMenuReference("block", "Mods");
         let block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
