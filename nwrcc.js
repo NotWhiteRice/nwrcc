@@ -81,12 +81,18 @@ function ACMenu() {
             subsection.appendChild(listing);
 
             var test = document.createElement("a");
-            test.setAttribute("class", "smallFancyButton prefButton option");
-            test.setAttribute("id", "testButton");
-            test.setAttribute("onclick", 'Game.Notify("*click*", "You pressed the button!", [9,0]);');
-            test.textContent = "Click for a notification!";
-            listing.appendChild(test);
+            {
+                test.setAttribute("class", "smallFancyButton prefButton option");
+                test.setAttribute("id", "testButton");
+                test.setAttribute("onclick", 'Game.Notify("*click*", "You pressed the button!", [9,0]);');
+                test.textContent = "Click for a notification";
+                listing.appendChild(test);
 
+                var label = document.createElement("label");
+                label.textContent = "Click to recieve a notification.";
+                listing.appendChild(label);
+                listing.appendChild(document.createElement("br"));
+            }
         }
 
         if(reference.nextSibling == undefined) {
