@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.94";
+var REVISION = "0.95";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -350,8 +350,9 @@ var init = function() {
         }
 
         // Creating instance
+        AutoCookie.instance.registerBuildings();
+        AutoCookie.instance.registerUpgrades();
         AutoCookie.instance.sync();
-        for(let i = 0; i < Game.ObjectsById.length; i++) new Building(Game.ObjectsById[i].name, Game.ObjectsById[i].basePrice, Game.ObjectsById[i].baseCps, Game.ObjectsById[i].amount, Game.ObjectsById[i].free);
 
         // Installing AutoCookie
         if(AutoCookie.MenuWrapper === undefined) AutoCookie.MenuWrapper = MenuWrapper;
