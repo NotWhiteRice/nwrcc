@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.77";
+var REVISION = "0.79";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -12,11 +12,10 @@ var Game = window.Game;
 var Instance = {
     sync() {
         this.wrathOdds = Game.elderWrath/3;
-        this.estGCTime;
         {
             var max = Game.shimmerTypes.golden.maxTime;
             var min = Game.shimmerTypes.golden.minTime;
-            this.estGCTime = min + Math.pow((3 * Math.pow(min, 5) + Math.pow(min, 6) - 15 * Math.pow(min, 4) * max + 30 * Math.pow(min, 3) * Math.pow(max, 2) - 30 * Math.pow(min, 2) * Math.pow(max, 3) + 15 * min * Math.pow(max, 4) - 3 * Math.pow(max, 5)), 1/6);
+            this.estGCTime = ((6 * max) + min) / 7;
         }
     }
 }
