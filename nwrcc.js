@@ -78,6 +78,7 @@ function ACMenu() {
 
             var menu = document.createElement("div");
             menu.setAttribute("class", "listing");
+            subsection.appendChild(menu);
 
             var test = document.createElement("a");
             test.setAttribute("class", "smallFancyButton prefButton option");
