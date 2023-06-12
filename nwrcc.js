@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.80";
+var REVISION = "0.82";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -44,7 +44,7 @@ var Instance = {
         }
 
         for(let j = 0; j < keys0.length; j++) odds[keys0[j]] = 0;
-        let keys1 = ObjectKeys(odds);
+        let keys1 = Object.keys(odds);
         while(i--) {
             seeds[i] = 1;
             for(let j = 0; j < keys0.length; j++) {
