@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.42";
+var REVISION = "0.43";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -69,6 +69,7 @@ function ACMenu() {
             var subsection = document.createElement("div");
             subsection.setAttribute("class", "subsection");
             subsection.setAttribute("style", "padding:0px;");
+            block.appendChild(subsection);
 
             var title = document.createElement("div");
             title.setAttribute("class", "title");
