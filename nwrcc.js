@@ -1,18 +1,16 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.54";
+var REVISION = "0.55";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
 var Game = window.Game;
 
 // Helper functions
-function MenuWrapper() {
-    this.test = "test";
-}
+var MenuWrapper() {}
 
-MenuWrapper.prototype.getMenuReference = function(classAttr, title) {
+MenuWrapper.getMenuReference = function(classAttr, title) {
     var menu = document.getElementById("menu");
     var list = menu.getElementsByClassName(classAttr);
     for(var i = 0; i < list.length; i++) {
@@ -21,7 +19,7 @@ MenuWrapper.prototype.getMenuReference = function(classAttr, title) {
     }
 }
 
-MenuWrapper.prototype.createElement = function(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
+MenuWrapper.createElement = function(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
     var element = document.createElement(elem);
     if(classAttr != "") element.setAttribute("class", classAttr);
     if(style != "") element.setAttribute("style", style);
@@ -147,11 +145,6 @@ var init = function() {
         AutoCookie.version = version;
         AutoCookie.foundMismatch = mismatch;
 
-        if(AutoCookie.MenuWrapper === undefined) AutoCookie.MenuWrapper = MenuWrapper;
-        if(AutoCookie.wrapMenu === undefined) AutoCookie.wrapMenu = wrapMenu;
-
-        AutoCookie.wrapMenu(true);
-
         // Creating instance
         AutoCookie.oldUpdateMenu = Game.UpdateMenu;
         Game.UpdateMenu = ACMenu;
@@ -181,8 +174,3 @@ var init = function() {
 
 init();
 };
-
-var wrapMenu = function(main) {
-    var wrapper = new AutoCookie.MenuWrapper();
-    if(main) AutoCookie.mainMenuWrapper = wrapper;
-}
