@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.83";
+var REVISION = "0.85";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -36,7 +36,7 @@ var Instance = {
         pool["Blab"] = 0.0001;
 
         let keys0 = Object.keys(pool);
-        let i = Math.pow(2, pool.length);
+        let i = Math.pow(2, keys0.length);
         let seeds = [];
         let odds = {
             Frenzy: 0,
@@ -45,6 +45,7 @@ var Instance = {
 
         for(let j = 0; j < keys0.length; j++) odds[keys0[j]] = 0;
         let keys1 = Object.keys(odds);
+
         while(i--) {
             seeds[i] = 1;
             for(let j = 0; j < keys0.length; j++) {
@@ -62,7 +63,7 @@ var Instance = {
                 }
             }
 
-            for(let key in keys0) {
+            for(let key in keys1) {
                 let label = keys1[key];
                 let val = keys1.length - key - 1;
                 let exp = Math.pow(2, val);
@@ -71,11 +72,12 @@ var Instance = {
             }
         }
 
-        while(true) {
+        let isDone = false;
+        while(!isDone) {
             let temp = {};
             for(let key in odds) temp[key] = 0;
 
-            i = Math.pow(2, pool.length);
+            i = Math.pow(2, keys0.length);
             while(i--) {
                 let bits = 0;
                 for(let j = i, k = 0; j > 0; k++) {
@@ -105,17 +107,17 @@ var Instance = {
                 }
             }
 
-            let conv = true;
+            isDone = true;
             for(let key in temp) {
-                if(odds[key] != temp[key]) conv = false;
+                if(odds[key] != temp[key]) isDone = false;
                 odds[key] = temp[key];
             }
-
-            return odds;
         }
-    }
 
+        return odds;
+    }
 }
+
 var MenuWrapper = {
     getMenuReference(classAttr, title) {
         let menu = document.getElementById("menu");
