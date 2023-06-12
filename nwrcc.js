@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.97";
+var REVISION = "0.98";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -57,14 +57,17 @@ var Instance = {
         this.totalBuildings = Game.BuildingsOwned;
         this.hasSugar = Game.canLumps();
         this.gcOdds = this.calcGCOdds();
+        console.log("synced everything before buildings");
         for(let obj in this.buildings) {
             this.buildings[obj].count = Game.Objects[obj].amount;
             this.buildings[obj].free = Game.Objects[obj].free;
         }
+        console.log("synced buildings");
         for(let upg in this.upgrades) {
             this.upgrades[upg].unlocked = Game.Upgrades[upg].unlocked;
             this.upgrades[upg].owned = Game.Upgrades[upg].bought;
         }
+        console.log("synced upgrades");
     },
 
     calcGCOdds() {
@@ -150,7 +153,7 @@ var Instance = {
                     }
                 }
             }
-
+            console.log(isDone);
             isDone = true;
             for(let key in temp) {
                 if(odds[key] != temp[key]) isDone = false;
