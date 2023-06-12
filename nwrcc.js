@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.93";
+var REVISION = "0.94";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -38,9 +38,9 @@ var UPGRADES = {
 
 // Helper objects
 var Instance = {
-    buildings = {},
-    upgrades = {},
-    achievements = {},
+    buildings: {},
+    upgrades: {},
+    achievements: {},
 
     registerBuildings() { for(let obj in BUILDINGS) this.buildings[obj] = new Building(BUILDINGS[obj]); },
     registerUpgrades() { for(let upg in UPGRADES) this.upgrades[obj] = new Upgrade(upg, UPGRADES[upg]); },
