@@ -159,6 +159,7 @@ var Instance = {
                 if(odds[key] != temp[key]) isDone = false;
                 odds[key] = temp[key];
             }
+            console.log(odds);
         }
 
         let hasBF = false;
