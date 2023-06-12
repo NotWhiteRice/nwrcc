@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.51";
+var REVISION = "0.52";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -10,7 +10,7 @@ var Game = window.Game;
 // Helper functions
 function MenuWrapper() {}
 
-MenuWrapper.prototype.getMenuReference(classAttr, title) {
+MenuWrapper.prototype.getMenuReference = function(classAttr, title) {
     var menu = document.getElementById("menu");
     var list = menu.getElementsByClassName(classAttr);
     for(var i = 0; i < list.length; i++) {
@@ -19,7 +19,7 @@ MenuWrapper.prototype.getMenuReference(classAttr, title) {
     }
 }
 
-MenuWrapper.prototype.createElement(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
+MenuWrapper.prototype.createElement = function(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
     var element = document.createElement(elem);
     if(classAttr != "") element.setAttribute("class", classAttr);
     if(style != "") element.setAttribute("style", style);
