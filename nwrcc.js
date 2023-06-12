@@ -145,6 +145,11 @@ var init = function() {
         AutoCookie.version = version;
         AutoCookie.foundMismatch = mismatch;
 
+        if(AutoCookie.MenuWrapper === undefined) AutoCookie.MenuWrapper = MenuWrapper;
+        if(AutoCookie.wrapMenu === undefined) AutoCookie.wrapMenu = wrapMenu;
+
+        AutoCookie.wrapMenu(true);
+
         // Creating instance
         AutoCookie.oldUpdateMenu = Game.UpdateMenu;
         Game.UpdateMenu = ACMenu;
@@ -174,3 +179,8 @@ var init = function() {
 
 init();
 };
+
+var wrapMenu = function(main) {
+    var wrapper = new AutoCookie.MenuWrapper();
+    if(main) AutoCookie.mainMenuWrapper = wrapper;
+}
