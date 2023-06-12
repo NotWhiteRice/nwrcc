@@ -17,7 +17,7 @@ function ACMenu() {
             var menu = document.getElementById("menu");
             var list = menu.getElementsByClassName("subsection");
             for(var i = 0; i < list.length; i++) {
-                var element = list[i].querySelector("title");
+                var element = list[i].querySelector(".title");
                 if(element.textContent === "General") {
                     reference = list[i];
                     break;
@@ -29,14 +29,16 @@ function ACMenu() {
         subsection.setAttribute("class", "subsection");
 
         var title = document.createElement("div");
-        title.setAttribute("class", "title");
-        title.setAttribute("style", "position:relative;");
-        title.textContent = "AutoCookie";
+        {
+            title.setAttribute("class", "title");
+            title.setAttribute("style", "position:relative;");
+            title.textContent = "AutoCookie";
+        }
         subsection.appendChild(title);
 
         var version = document.createElement("div");
-        version.setAttribute("class", "listing");
         {
+            version.setAttribute("class", "listing");
             var element = document.createElement("b");
             element.textContent = "Version:";
             version.appendChild(element);
@@ -46,7 +48,18 @@ function ACMenu() {
 
         reference.parentNode.insertBefore(subsection, reference.nextSibling);
     } else if(Game.onMenu = "prefs") {
-        var menu = document.getElementById("menu");
+        var reference;
+        {
+            var menu = document.getElementById("menu");
+            var list = menu.getElementsByClassName("block");
+            for(var i = 0; i < list.length; i++) {
+                var element = list[i].querySelector(".title");
+                if(element.textContent === "Mods") {
+                    reference = list[i];
+                    break;
+                }
+            }
+        }
     }
 }
 
