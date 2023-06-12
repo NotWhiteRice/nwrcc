@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.79";
+var REVISION = "0.80";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -11,26 +11,123 @@ var Game = window.Game;
 // Helper objects
 var Instance = {
     sync() {
-        this.wrathOdds = Game.elderWrath/3;
         {
-            var max = Game.shimmerTypes.golden.maxTime;
-            var min = Game.shimmerTypes.golden.minTime;
+            let max = Game.shimmerTypes.golden.maxTime;
+            let min = Game.shimmerTypes.golden.minTime;
             this.estGCTime = ((6 * max) + min) / 7;
         }
+        this.bank = Game.cookies;
+        this.cookiesEarned = Game.cookiesEarned;
+        this.season = Game.season;
+        this.totalBuildings = Game.BuildingsOwned;
+        this.hasSugar = Game.canLumps();
+        this.gcOdds = calcGCOdds();
+    },
+
+    calcGCOdds() {
+        let pool = [];
+        if(this.cookiesEarned >= 100000) {
+            pool["Chain"] = 0.03;
+            pool["Storm"] = 0.03;
+        }
+        if(this.season == "fools") pool["Everything Must Go"] = 0.05;
+        pool["Click Frenzy"] = 0.1;
+        if(this.hasSugar) pool["Sweet"] = 0.0005;
+        pool["Blab"] = 0.0001;
+
+        let keys0 = Object.keys(pool);
+        let i = Math.pow(2, pool.length);
+        let seeds = [];
+        let odds = {
+            Frenzy: 0,
+            Lucky: 0,
+        }
+
+        for(let j = 0; j < keys0.length; j++) odds[keys0[j]] = 0;
+        let keys1 = ObjectKeys(odds);
+        while(i--) {
+            seeds[i] = 1;
+            for(let j = 0; j < keys0.length; j++) {
+                let val = pool[keys0[keys0.length - j]];
+                let exp = Math.pow(2, j);
+                seeds[i] *= (i % (2 * exp) >= exp) ? val : (1 - val);
+            }
+
+            let bits = 0;
+            for(let j = i, k = 0; j > 0; k++) {
+                let exp = Math.pow(2, k);
+                if(j % (2 * exp) != 0) {
+                    j -= exp;
+                    bits++;
+                }
+            }
+
+            for(let key in keys0) {
+                let label = keys1[key];
+                let val = keys1.length - key - 1;
+                let exp = Math.pow(2, val);
+                let factor = label == "Frenzy" || label == "Lucky" || (i % (2 * exp) >= exp);
+                if(factor) odds[label] += seeds[i] / (bits + 2);
+            }
+        }
+
+        while(true) {
+            let temp = {};
+            for(let key in odds) temp[key] = 0;
+
+            i = Math.pow(2, pool.length);
+            while(i--) {
+                let bits = 0;
+                for(let j = i, k = 0; j > 0; k++) {
+                    let exp = Math.pow(2, k);
+                    if(j % (2 * exp) != 0) {
+                        j -= exp;
+                        bits++;
+                    }
+                }
+
+                for(let key0 in keys1) {
+                    let label0 = keys1[key0];
+                    let val0 = keys1.length - key0 - 1;
+                    let exp0 = Math.pow(2, val0);
+                    let factor0 = label0 == "Frenzy" || label0 == "Lucky" || (i % (2 * exp) >= exp);
+                    if(factor0) {
+                        for(let key1 in keys1) {
+                            let label1 = keys1[key1];
+                            let val1 = keys1.length - key1 - 1;
+                            let exp1 = Math.pow(2, val1);
+                            let factor1 = label1 != "Blab" && (label1 == "Frenzy" || label1 == "Lucky" || (i % (2 * exp) >= exp));
+                            temp[label0] += seeds[i] * odds[label1] * 0.2 / (bits + 2);
+                            if(label0 != "Blab" && label0 == label1) continue;
+                            temp[label0] += seeds[i] * odds[label1] * 0.8 / (bits + (factor1 ? 1 : 2));
+                        }
+                    }
+                }
+            }
+
+            let conv = true;
+            for(let key in temp) {
+                if(odds[key] != temp[key]) conv = false;
+                odds[key] = temp[key];
+            }
+
+            return odds;
+        }
     }
+
 }
 var MenuWrapper = {
     getMenuReference(classAttr, title) {
-        var menu = document.getElementById("menu");
-        var list = menu.getElementsByClassName(classAttr);
-        for(var i = 0; i < list.length; i++) {
-            var element = list[i].querySelector(".title");
+        let menu = document.getElementById("menu");
+        let list = menu.getElementsByClassName(classAttr);
+        for(let i = 0; i < list.length; i++) {
+            let element = list[i].querySelector(".title");
             if(element.textContent === title) return list[i];
         }
     },
 
     createElement(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
-        var element = document.createElement(elem);
+        let element = document.createElement(elem);
         if(classAttr != "") element.setAttribute("class", classAttr);
         if(style != "") element.setAttribute("style", style);
         if(text != "") element.textContent = text;
@@ -43,14 +140,14 @@ var MenuWrapper = {
     },
 
     createStatistic(parent, statistic, value) {
-        var element = this.createElement("div", parent, "listing");
+        let element = this.createElement("div", parent, "listing");
         this.createElement("b", element, "", "", `${statistic}:`);
         element.append(` ${value}`);
     },
 
     createButton(parent, id, option, onText, offText, desc, dim = true) {
-        var label = AutoCookie.user[option] ? onText : offText;
-        var button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
+        let label = AutoCookie.user[option] ? onText : offText;
+        let button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
         button.setAttribute("id", id);
         button.setAttribute("onclick", `window.nwrAutoCookie.MenuWrapper.toggle("${option}", "${id}", "${onText}", "${offText}", 0, ${dim})`);
         if(desc != "") {
@@ -60,7 +157,7 @@ var MenuWrapper = {
     },
 
     toggle(option, id, on, off, invert = 0, dim = true) {
-        var button = document.getElementById(id);
+        let button = document.getElementById(id);
         if(window.nwrAutoCookie.user[option]) {
             button.innerHTML = off;
             window.nwrAutoCookie.user[option] = false;
@@ -72,9 +169,9 @@ var MenuWrapper = {
     },
 
     createSection(parent, title, buttonID, option) {
-        var elem0 = this.createElement("div", parent, "title", "padding:0px 16px;opacity:0.7;font-size:17px;font-family:Kavoon,Georgia,serif;", `${title} `);
+        let elem0 = this.createElement("div", parent, "title", "padding:0px 16px;opacity:0.7;font-size:17px;font-family:Kavoon,Georgia,serif;", `${title} `);
         this.createButton(elem0, buttonID, option, "Hide", "Show", "", false);
-        var section = this.createElement("div", parent, "subsection");
+        let section = this.createElement("div", parent, "subsection");
         return section;
     },
 }
@@ -84,40 +181,40 @@ function ACMenu() {
     AutoCookie.oldUpdateMenu();
     AutoCookie.instance.sync();
     if(Game.onMenu == "stats") {
-        var reference = MenuWrapper.getMenuReference("subsection", "General");
-        var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
+        let reference = MenuWrapper.getMenuReference("subsection", "General");
+        let subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
         MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
         MenuWrapper.createStatistic(subsection, "Version", AutoCookie.version);
-        var gcStats = MenuWrapper.createSection(subsection, "Golden Cookie statistics", "nwrGCStatsButton", "showGCStats");
-        MenuWrapper.createStatistic(gcStats, "Wrath Cookie probability", AutoCookie.instance.wrathOdds);
-        MenuWrapper.createStatistic(gcStats, "Estimated time left", Math.max(0, Math.ceil((AutoCookie.instance.estGCTime - Game.shimmerTypes.golden.time) / 30)));
+        let gcStats = MenuWrapper.createSection(subsection, "Golden Cookie statistics", "nwrGCStatsButton", "showGCStats");
+        MenuWrapper.createStatistic(gcStats, "Estimated time left", Game.shimmers.length > 0 ? "---" : Math.max(0, Math.ceil((AutoCookie.instance.estGCTime - Game.shimmerTypes.golden.time) / 30)));
+        for(let i in AutoCookie.instance.gcOdds) MenuWrapper.createStatistics(gcStats, i, AutoCookie.instance.gcOdds[i]);
     } else if(Game.onMenu = "prefs") {
-        var reference = MenuWrapper.getMenuReference("block", "Mods");
-        var block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
-        var subsection = MenuWrapper.createElement("div", block, "subsection", "padding:0px;");
+        let reference = MenuWrapper.getMenuReference("block", "Mods");
+        let block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
+        let subsection = MenuWrapper.createElement("div", block, "subsection", "padding:0px;");
         MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
-        var listing = MenuWrapper.createElement("div", subsection, "listing");
+        let listing = MenuWrapper.createElement("div", subsection, "listing");
     }
 }
 
 
 var init = function() {
     try {
-        var version = 'v' + VERSION + '.' + REVISION + '-' + DEVBUILD;
+        let version = 'v' + VERSION + '.' + REVISION + '-' + DEVBUILD;
         if(window.nwrAutoCookie != undefined && window.nwrAutoCookie.ready) {
             Game.Notify("AutoCookie has already been injected...", window.nwrAutoCookie.version, [32, 0]);
             return;
         }
 
         // Handling version mismatch
-        var mismatch = false;
-        var ignoreMismatchFor = null;
+        let mismatch = false;
+        let ignoreMismatchFor = null;
         if(Game.version != VERSION) {
             mismatch = true;
-            var preset = "the version mismatch warning has been previously disabled in user settings";
+            let preset = "the version mismatch warning has been previously disabled in user settings";
             if(localStorage) ignoreMismatchFor = localStorage.getItem("nwrAutoCookie_IgnoreMismatchForVersion");
             if(ignoreMismatchFor !== Game.version + '|' + VERSION + '|' + REVISION) {
-                var dialog = confirm(`AutoCookie ${version} was created for Cookie Clicker ${version}. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?`);
+                let dialog = confirm(`AutoCookie ${version} was created for Cookie Clicker ${version}. \nInjecting AutoCookie may have unforeseen consequences... \n\nProceed anyways?`);
                 if(!dialog) return;
                 preset = "this warning cannot be disabled as of yet.";
                 Game.prefs.nwrAutoCookie_IgnoreMismatchForVersion = false;
@@ -134,8 +231,8 @@ var init = function() {
             window.nwrAutoCookie = AutoCookie;
         } else {
             if(window.nwrAutoCookie.preloadHooks) {
-                var instance = {ccVersion: VERSION, revision: REVISION, devBuild: DEVBUILD, version: version};
-                for(var hook in window.nwrAutoCookie) {
+                let instance = {ccVersion: VERSION, revision: REVISION, devBuild: DEVBUILD, version: version};
+                for(let hook in window.nwrAutoCookie) {
                     if(!hook(instance)) {
                         Game.Notify('Injecting AutoCookie has been prohibited by another mod', '', [19, 0]);
                         return;
@@ -168,12 +265,12 @@ var init = function() {
 
         // Calling postload hooks
         if(AutoCookie.postloadHooks) {
-            for(var i = 0; i < AutoCookie.postloadHooks.length; i++) {
+            for(let i = 0; i < AutoCookie.postloadHooks.length; i++) {
                 (AutoCookie.postloadHooks[i])(AutoCookie);
             }
         }
 
-        var msg = `AutoCookie ${version} has successfully been injected.`;
+        let msg = `AutoCookie ${version} has successfully been injected.`;
         if(Game.prefs.popups) {
             Game.Popup(msg);
         } else {
