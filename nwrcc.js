@@ -1,65 +1,86 @@
 function injectAutoCookie() {
 
+// Version settings
 var VERSION = "2.052";
-var REVISION = "0.59";
+var REVISION = "0.62";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
 var Game = window.Game;
 
 // Helper functions
-var MenuWrapper = {}
-
-MenuWrapper.getMenuReference = function(classAttr, title) {
-    var menu = document.getElementById("menu");
-    var list = menu.getElementsByClassName(classAttr);
-    for(var i = 0; i < list.length; i++) {
-        var element = list[i].querySelector(".title");
-        if(element.textContent === title) return list[i];
+var MenuHelper = {
+    getMenuReference = function(classAttr, title) {
+        var menu = document.getElementById("menu");
+        var list = menu.getElementsByClassName(classAttr);
+        for(var i = 0; i < list.length; i++) {
+            var element = list[i].querySelector(".title");
+            if(element.textContent === title) return list[i];
+        }
     }
-}
 
-MenuWrapper.createElement = function(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
-    var element = document.createElement(elem);
-    if(classAttr != "") element.setAttribute("class", classAttr);
-    if(style != "") element.setAttribute("style", style);
-    if(text != "") element.textContent = text;
-    if(ref.nextSibling == undefined) {
-        parent.appendChild(element);
-    } else {
-        parent.insertBefore(element, ref.nextSibling);
+    createElement = function(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
+        var element = document.createElement(elem);
+        if(classAttr != "") element.setAttribute("class", classAttr);
+        if(style != "") element.setAttribute("style", style);
+        if(text != "") element.textContent = text;
+        if(ref.nextSibling == undefined) {
+            parent.appendChild(element);
+        } else {
+            parent.insertBefore(element, ref.nextSibling);
+        }
+        return element;
     }
-    return element;
-}
 
-MenuWrapper.createButton = function(parent, id, func, label, desc) {
-    var button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
-    button.setAttribute("onclick", func);
-    this.createElement("label", parent, "", "", desc);
-    this.createElement("br", parent);
+    createStatistic = function(parent, statistic, value) {
+        var element = this.createElement("div", parent, "listing");
+        this.createElement("b", parent, "", "", `${statistic}:`);
+        element.append(` ${value}`);
+    }
+
+    createButton = function(parent, id, func, label, desc) {
+        var button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
+        button.setAttribute("onclick", func);
+        this.createElement("label", parent, "", "", desc);
+        this.createElement("br", parent);
+    }
+
+    toggle = function(option, id, on, off, invert = 0, dim = true) {
+        var button = document.getElementById(id);
+        if(AutoCookie.user[option]) {
+            button.innerHTML = off;
+            AutoCookie.user[option] = 0;
+        } else {
+            button.innerHTML = on;
+            AutoCookie.user[option] = 1;
+        }
+        if(dim) button.className = `smallFancyButton prefButton option${(AutoCookie.user[option] ^ invert) ? '' : ' off'}`;
+    }
+
+    createSection = function(parent, title, buttonID, option) {
+        var elem0 = this.createElement("div", parent, "title", "padding:0px 16px;opacity:0.7;font-size:17px;font-family:Kavoon,Georgia,serif;", `${title} `);
+        this.createButton(elem0, buttonID, `MenuHelper.toggle(${option}, ${buttonID}, "Hide", "Show", '0', false)`, "Hide", "");
+        var section = this.createElement("div", "parent", "subsection");
+        return section;
+    }
 }
 
 // Hooks
 function ACMenu() {
     AutoCookie.oldUpdateMenu();
     if(Game.onMenu == "stats") {
-        var reference = MenuWrapper.getMenuReference("subsection", "General");
-        var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
-        MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
-        {
-            var element = MenuWrapper.createElement("div", subsection, "listing");
-            MenuWrapper.createElement("b", element, "", "", "Version:");
-            element.append(` ${AutoCookie.version}`);
-        }
+        var reference = MenuHelper.getMenuReference("subsection", "General");
+        var subsection = MenuHelper.createElement("div", reference.parentNode, "subsection", "", "", reference);
+        MenuHelper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
+        MenuHelper.createStatistic(subsection, "Version", AutoCookie.version);
+        var gcStats = MenuHelper.createSection(subsection, "Long-term Golden Cookie Probabilities", "nwrGCStatsButton", "showGCStats");
     } else if(Game.onMenu = "prefs") {
-        var reference = MenuWrapper.getMenuReference("block", "Mods");
-        var block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
-        var subsection = MenuWrapper.createElement("div", block, "subsection", "padding:0px;");
-        MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
-        {
-            var element = MenuWrapper.createElement("div", subsection, "listing");
-            MenuWrapper.createButton(element, "testButton", 'Game.Notify("*click*", "You pressed the button!", [9,0]);', "Notification button", "Click to make a notification.");
-        }
+        var reference = MenuHelper.getMenuReference("block", "Mods");
+        var block = MenuHelper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
+        var subsection = MenuHelper.createElement("div", block, "subsection", "padding:0px;");
+        MenuHelper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
+        var listing = MenuHelper.createElement("div", subsection, "listing");
+        MenuHelper.createButton(listing, "testButton", 'Game.Notify("*click*", "You pressed the button!", [9,0]);', "Notification button", "Click to make a notification.");
     }
 }
 
@@ -100,7 +121,7 @@ var init = function() {
                 var instance = {ccVersion: VERSION, revision: REVISION, devBuild: DEVBUILD, version: version};
                 for(var hook in window.nwrAutoCookie) {
                     if(!hook(instance)) {
-                        Game.Notify('AutoCookie was unable to be injected due to the presense of another mod', '', [19, 0]);
+                        Game.Notify('Injecting AutoCookie has been prohibited by another mod', '', [19, 0]);
                         return;
                     }
                 }
@@ -118,8 +139,13 @@ var init = function() {
         AutoCookie.foundMismatch = mismatch;
 
         // Creating instance
+
+        // Installing AutoCookie
         AutoCookie.oldUpdateMenu = Game.UpdateMenu;
         Game.UpdateMenu = ACMenu;
+
+        // User config
+        AutoCookie.user.showGCStats = true;
 
         // Calling postload hooks
         if(AutoCookie.postloadHooks) {
@@ -141,7 +167,6 @@ var init = function() {
     }
 }
 
-// LoadScriptHook
 // genInstance
 
 init();
