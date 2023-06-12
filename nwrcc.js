@@ -24,8 +24,12 @@ function ACMenu() {
 
         var version = document.createElement("div");
         version.setAttribute("class", "listing");
-        version.appendChild('<b>Version:<\b>');
-        version.append(AutoCookie.version);
+        {
+            var element = document.createElement("b");
+            element.textContent = "Version:";
+            version.appendChild(element);
+            version.append(AutoCookie.version);
+        }
         subsection.appendChild(version);
 
         reference.parentNode.insertBefore(subsection, reference.nextSibling);
