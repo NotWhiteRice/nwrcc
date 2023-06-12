@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.50";
+var REVISION = "0.51";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -10,18 +10,18 @@ var Game = window.Game;
 // Helper functions
 function MenuWrapper() {}
 
-MenuWrapper.prototype.getMenuReference(class, title) {
+MenuWrapper.prototype.getMenuReference(classAttr, title) {
     var menu = document.getElementById("menu");
-    var list = menu.getElementsByClassName(class);
+    var list = menu.getElementsByClassName(classAttr);
     for(var i = 0; i < list.length; i++) {
         var element = list[i].querySelector(".title");
         if(element.textContent === title) return list[i];
     }
 }
 
-MenuWrapper.prototype.createElement(elem, parent, class = "" , style = "", text = "", ref = "") {
+MenuWrapper.prototype.createElement(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
     var element = document.createElement(elem);
-    if(class != "") element.setAttribute("class", class);
+    if(classAttr != "") element.setAttribute("class", classAttr);
     if(style != "") element.setAttribute("style", style);
     if(text != "") element.textContent = text;
     if(ref.nextSibling == undefined) {
