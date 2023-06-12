@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "1.0";
+var REVISION = "1.1";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -57,17 +57,14 @@ var Instance = {
         this.totalBuildings = Game.BuildingsOwned;
         this.hasSugar = Game.canLumps();
         this.gcOdds = this.calcGCOdds();
-        console.log("synced everything before buildings");
         for(let obj in this.buildings) {
             this.buildings[obj].count = Game.Objects[obj].amount;
             this.buildings[obj].free = Game.Objects[obj].free;
         }
-        console.log("synced buildings");
         for(let upg in this.upgrades) {
             this.upgrades[upg].unlocked = Game.Upgrades[upg].unlocked;
             this.upgrades[upg].owned = Game.Upgrades[upg].bought;
         }
-        console.log("synced upgrades");
     },
 
     calcGCOdds() {
@@ -163,6 +160,8 @@ var Instance = {
             max--;
             console.log(odds);
         }
+
+        if(max == 0) console.log("GC algorithm reached maximum amount of iterations");
 
         let hasBF = false;
         for(let obj in this.buildings) if(this.buildings[obj].count >= 10) hasBF = true;
@@ -356,13 +355,9 @@ var init = function() {
         }
 
         // Creating instance
-        console.log("before instance");
         AutoCookie.instance.registerBuildings();
-        console.log("done with buildings");
         AutoCookie.instance.registerUpgrades();
-        console.log("done with upgrades");
         AutoCookie.instance.sync();
-        console.log("done syncing with game");
 
         // Installing AutoCookie
         if(AutoCookie.MenuWrapper === undefined) AutoCookie.MenuWrapper = MenuWrapper;
