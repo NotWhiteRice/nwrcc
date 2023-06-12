@@ -2,13 +2,18 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.74";
+var REVISION = "0.75";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
 var Game = window.Game;
 
-// Helper functions
+// Helper objects
+var Instance = {
+    sync() {
+        this.wrathOdds = Game.elderWrath/3;
+    }
+}
 var MenuWrapper = {
     getMenuReference(classAttr, title) {
         var menu = document.getElementById("menu");
@@ -53,10 +58,10 @@ var MenuWrapper = {
         var button = document.getElementById(id);
         if(window.nwrAutoCookie.user[option]) {
             button.innerHTML = off;
-            window.nwrAutoCookie.user[option] = 0;
+            window.nwrAutoCookie.user[option] = false;
         } else {
             button.innerHTML = on;
-            window.nwrAutoCookie.user[option] = 1;
+            window.nwrAutoCookie.user[option] = true;
         }
         if(dim) button.className = `smallFancyButton prefButton option${(window.nwrAutoCookie.user[option] ^ invert) ? '' : ' off'}`;
     },
@@ -77,7 +82,8 @@ function ACMenu() {
         var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
         MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
         MenuWrapper.createStatistic(subsection, "Version", AutoCookie.version);
-        var gcStats = MenuWrapper.createSection(subsection, "Long-term Golden Cookie Probabilities", "nwrGCStatsButton", "showGCStats");
+        var gcStats = MenuWrapper.createSection(subsection, "Golden Cookie statistics", "nwrGCStatsButton", "showGCStats");
+        MenuWrapper.createStatistic(gcStats, "Wrath Cookie probability", AutoCookie.instance.wrathOdds);
     } else if(Game.onMenu = "prefs") {
         var reference = MenuWrapper.getMenuReference("block", "Mods");
         var block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
@@ -140,11 +146,13 @@ var init = function() {
         AutoCookie.devBuild = DEVBUILD;
         AutoCookie.version = version;
         AutoCookie.foundMismatch = mismatch;
+        AutoCookie.instance = Instance;
         AutoCookie.user = {
             showGCStats: true,
         }
 
         // Creating instance
+        AutoCookie.instance.sync();
 
         // Installing AutoCookie
         if(AutoCookie.MenuWrapper === undefined) AutoCookie.MenuWrapper = MenuWrapper;
