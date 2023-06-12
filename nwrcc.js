@@ -1,14 +1,14 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.55";
+var REVISION = "0.56";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
 var Game = window.Game;
 
 // Helper functions
-var MenuWrapper() {}
+var MenuWrapper = {}
 
 MenuWrapper.getMenuReference = function(classAttr, title) {
     var menu = document.getElementById("menu");
