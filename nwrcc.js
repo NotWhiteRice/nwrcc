@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.90";
+var REVISION = "0.91";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -168,6 +168,7 @@ var MenuWrapper = {
             window.nwrAutoCookie.user[option] = true;
         }
         if(dim) button.className = `smallFancyButton prefButton option${(window.nwrAutoCookie.user[option] ^ invert) ? '' : ' off'}`;
+        Game.UpdateMenu();
     },
 
     createSection(parent, title, buttonID, option) {
@@ -194,10 +195,12 @@ function ACMenu() {
         }
     } else if(Game.onMenu = "prefs") {
         let reference = MenuWrapper.getMenuReference("block", "Mods");
-        let block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
-        let subsection = MenuWrapper.createElement("div", block, "subsection", "padding:0px;");
-        MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
-        let listing = MenuWrapper.createElement("div", subsection, "listing");
+        if(reference !== undefined) {
+            let block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
+            let subsection = MenuWrapper.createElement("div", block, "subsection", "padding:0px;");
+            MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
+            let listing = MenuWrapper.createElement("div", subsection, "listing");
+        }
     }
 }
 
