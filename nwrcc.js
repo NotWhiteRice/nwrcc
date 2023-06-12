@@ -17,7 +17,7 @@ var MenuHelper = {
             var element = list[i].querySelector(".title");
             if(element.textContent === title) return list[i];
         }
-    }
+    },
 
     createElement(elem, parent, classAttr = "" , style = "", text = "", ref = "") {
         var element = document.createElement(elem);
@@ -30,20 +30,20 @@ var MenuHelper = {
             parent.insertBefore(element, ref.nextSibling);
         }
         return element;
-    }
+    },
 
     createStatistic(parent, statistic, value) {
         var element = this.createElement("div", parent, "listing");
         this.createElement("b", parent, "", "", `${statistic}:`);
         element.append(` ${value}`);
-    }
+    },
 
     createButton(parent, id, func, label, desc) {
         var button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
         button.setAttribute("onclick", func);
         this.createElement("label", parent, "", "", desc);
         this.createElement("br", parent);
-    }
+    },
 
     toggle(option, id, on, off, invert = 0, dim = true) {
         var button = document.getElementById(id);
@@ -55,14 +55,14 @@ var MenuHelper = {
             AutoCookie.user[option] = 1;
         }
         if(dim) button.className = `smallFancyButton prefButton option${(AutoCookie.user[option] ^ invert) ? '' : ' off'}`;
-    }
+    },
 
     createSection(parent, title, buttonID, option) {
         var elem0 = this.createElement("div", parent, "title", "padding:0px 16px;opacity:0.7;font-size:17px;font-family:Kavoon,Georgia,serif;", `${title} `);
         this.createButton(elem0, buttonID, `MenuHelper.toggle(${option}, ${buttonID}, "Hide", "Show", '0', false)`, "Hide", "");
         var section = this.createElement("div", "parent", "subsection");
         return section;
-    }
+    },
 }
 
 // Hooks
