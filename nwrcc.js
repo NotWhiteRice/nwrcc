@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.57";
+var REVISION = "0.58";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -32,6 +32,12 @@ MenuWrapper.createElement = function(elem, parent, classAttr = "" , style = "", 
     return element;
 }
 
+MenuWrapper.createButton = function(parent, id, func, label, desc) {
+    var button = this.createElement("a", parent, "smallFancyButton prefButton option", "", label);
+    button.setAttribute("onclick", func);
+    this.createElement("label", parent, "", "", desc);
+    this.createElement("br", parent);
+}
 
 // Hooks
 function ACMenu() {
@@ -39,54 +45,19 @@ function ACMenu() {
     if(Game.onMenu == "stats") {
         var reference = MenuWrapper.getMenuReference("subsection", "General");
         var subsection = MenuWrapper.createElement("div", reference.parentNode, "subsection", "", "", reference);
-        console.log(subsection);
         MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
         {
-            var element = MenuWrapper.createElement("div", "listing", "", " ${AutoCookie.version}");
-            MenuWrapper.createElement("b", "", "", "Version:");
+            var element = MenuWrapper.createElement("div", subsection, "listing", "", " ${AutoCookie.version}");
+            MenuWrapper.createElement("b", element, "", "", "Version:");
         }
     } else if(Game.onMenu = "prefs") {
         var reference = MenuWrapper.getMenuReference("block", "Mods");
-
-        var block = document.createElement("div");
+        var block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
+        var subsection = MenuWrapper.createElement("div", block, "subsection", "padding:0px;");
+        MenuWrapper.createElement("div", subsection, "title", "position:relative;", "AutoCookie");
         {
-            block.setAttribute("class", "block");
-            block.setAttribute("style", "padding:0px;margin:8px 4px;");
-
-            var subsection = document.createElement("div");
-            subsection.setAttribute("class", "subsection");
-            subsection.setAttribute("style", "padding:0px;");
-            block.appendChild(subsection);
-
-            var title = document.createElement("div");
-            title.setAttribute("class", "title");
-            title.setAttribute("style", "position:relative;");
-            title.textContent = "AutoCookie";
-            subsection.appendChild(title);
-
-            var listing = document.createElement("div");
-            listing.setAttribute("class", "listing");
-            subsection.appendChild(listing);
-
-            var test = document.createElement("a");
-            {
-                test.setAttribute("class", "smallFancyButton prefButton option");
-                test.setAttribute("id", "testButton");
-                test.setAttribute("onclick", 'Game.Notify("*click*", "You pressed the button!", [9,0]);');
-                test.textContent = "Click for a notification";
-                listing.appendChild(test);
-
-                var label = document.createElement("label");
-                label.textContent = "Click to recieve a notification.";
-                listing.appendChild(label);
-                listing.appendChild(document.createElement("br"));
-            }
-        }
-
-        if(reference.nextSibling == undefined) {
-            reference.parentNode.appendChild(block);
-        } else {
-            reference.parentNode.insertBefore(block, reference.nextSibling);
+            var element = MenuWrapper.createElement("div", subsection, "listing");
+            MenuWrapper.createButton(element, "testButton", 'Game.Notify("*click*", "You pressed the button!", [9,0]);', "Notification button", "Click to make a notification.");
         }
     }
 }
