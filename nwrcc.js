@@ -187,7 +187,7 @@ function ACMenu() {
         MenuWrapper.createStatistic(subsection, "Version", AutoCookie.version);
         let gcStats = MenuWrapper.createSection(subsection, "Golden Cookie statistics", "nwrGCStatsButton", "showGCStats");
         MenuWrapper.createStatistic(gcStats, "Estimated time left", Game.shimmers.length > 0 ? "---" : Math.max(0, Math.ceil((AutoCookie.instance.estGCTime - Game.shimmerTypes.golden.time) / 30)));
-        for(let i in AutoCookie.instance.gcOdds) MenuWrapper.createStatistics(gcStats, i, AutoCookie.instance.gcOdds[i]);
+        for(let i in AutoCookie.instance.gcOdds) MenuWrapper.createStatistic(gcStats, i, AutoCookie.instance.gcOdds[i]);
     } else if(Game.onMenu = "prefs") {
         let reference = MenuWrapper.getMenuReference("block", "Mods");
         let block = MenuWrapper.createElement("div", reference.parentNode, "block", "padding:0px;margin:8px 4px;", "", reference);
