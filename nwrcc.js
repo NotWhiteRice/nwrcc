@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.86";
+var REVISION = "0.88";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -49,7 +49,7 @@ var Instance = {
         while(i--) {
             seeds[i] = 1;
             for(let j = 0; j < keys0.length; j++) {
-                let val = pool[keys0[keys0.length - j]];
+                let val = pool[keys0[keys0.length - j - 1]];
                 let exp = Math.pow(2, j);
                 seeds[i] *= (i % (2 * exp) >= exp) ? val : (1 - val);
             }
@@ -112,7 +112,6 @@ var Instance = {
                 if(odds[key] != temp[key]) isDone = false;
                 odds[key] = temp[key];
             }
-            console.log(odds);
         }
 
         return odds;
