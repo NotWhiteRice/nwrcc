@@ -1,7 +1,7 @@
 function injectAutoCookie() {
 
 var VERSION = "2.052";
-var REVISION = "0.43";
+var REVISION = "0.44";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -85,7 +85,7 @@ function ACMenu() {
             test.onclick = Game.Notify("*click*", "You pressed the button!", [9,0]);
             test.textContent = "Click for a notification!";
             menu.appendChild(test);
-            
+
         }
 
         if(reference.nextSibling == undefined) {
