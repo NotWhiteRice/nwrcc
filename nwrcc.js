@@ -28,7 +28,7 @@ function ACMenu() {
             var element = document.createElement("b");
             element.textContent = "Version:";
             version.appendChild(element);
-            version.append(AutoCookie.version);
+            version.append(" " + AutoCookie.version);
         }
         subsection.appendChild(version);
 
