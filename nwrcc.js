@@ -12,15 +12,23 @@ var Game = window.Game;
 function ACMenu() {
     AutoCookie.oldUpdateMenu();
     if(Game.onMenu == "stats") {
+        var reference = document.getElementsByClassName("subsection")[0];
         var subsection = document.createElement("div");
         subsection.setAttribute("class", "subsection");
+
         var title = document.createElement("div");
         title.setAttribute("class", "title");
         title.setAttribute("style", "position:relative;");
-        title.textContent = "AutoCookie by NotWhiteRice";
-
+        title.textContent = "AutoCookie";
         subsection.appendChild(title);
-        document.getElementsByClassName("subsection")[0].append(subsection);
+
+        var version = document.createElement("div");
+        version.setAttribute("class", "listing");
+        version.appendChild('<b>Version:<\b>');
+        version.append(AutoCookie.version);
+        subsection.appendChild(version);
+
+        reference.parentNode.insertBefore(subsection, reference.nextSibling);
     }
 }
 
