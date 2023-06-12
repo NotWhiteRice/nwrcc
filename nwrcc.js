@@ -2,14 +2,49 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.91";
+var REVISION = "0.92";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
 var Game = window.Game;
 
+// Game data
+var BUILDINGS = {
+    "Cursor": [15, 0.1],
+    "Grandma": [100, 1],
+    "Farm": [1100, 8],
+    "Mine": [12000, 47],
+    "Factory": [130000, 260],
+    "Bank": [1400000, 1400],
+    "Temple": [20000000, 7800],
+    "Wizard tower": [330000000, 44000],
+    "Shipment": [5100000000, 260000],
+    "Alchemy lab": [75000000000, 1600000],
+    "Portal": [1000000000000, 10000000],
+    "Time machine": [14000000000000, 65000000],
+    "Antimatter condenser": [170000000000000, 430000000],
+    "Prism": [2100000000000000, 2900000000],
+    "Chancemaker": [26000000000000000, 21000000000],
+    "Fractal engine": [310000000000000000, 150000000000],
+    "Javascript console": [71000000000000000000, 1100000000000],
+    "Idleverse": [12000000000000000000000, 8300000000000],
+    "Cortex baker": [1900000000000000000000000, 64000000000000],
+    "You": [540000000000000000000000000, 510000000000000],
+}
+var UPGRADES = {
+    "Reinforced index finger": [{buildings:{Cursor: 1}}, 100, {mult:{mouse: 2, Cursor: 2}}],
+}
+
+
 // Helper objects
 var Instance = {
+    buildings = {},
+    upgrades = {},
+    achievements = {},
+
+    registerBuildings() { for(let obj in BUILDINGS) this.buildings[obj] = new Building(BUILDINGS[obj]); }
+    registerUpgrades() { for(let upg in UPGRADES) this.upgrades[obj] = new Upgrade(upg, UPGRADES[upg]); }
+
     sync() {
         {
             let max = Game.shimmerTypes.golden.maxTime;
@@ -22,6 +57,14 @@ var Instance = {
         this.totalBuildings = Game.BuildingsOwned;
         this.hasSugar = Game.canLumps();
         this.gcOdds = this.calcGCOdds();
+        for(let obj in this.buildings) {
+            this.buildings[obj].count = Game.Objects[obj].amount;
+            this.buildings[obj].free = Game.Objects[obj].free;
+        }
+        for(let upg in this.upgrades) {
+            this.upgrades[upg].unlocked = Game.Upgrades[upg].unlocked;
+            this.upgrades[upg].owned = Game.Upgrades[upg].bought;
+        }
     },
 
     calcGCOdds() {
@@ -32,6 +75,7 @@ var Instance = {
         }
         if(this.season == "fools") pool["Everything Must Go"] = 0.05;
         pool["Click Frenzy"] = 0.1;
+        if(this.totalBuildings >= 10) pool["Building special"] = 0.25;
         if(this.hasSugar) pool["Sweet"] = 0.0005;
         pool["Blab"] = 0.0001;
 
@@ -114,10 +158,17 @@ var Instance = {
             }
         }
 
+        let hasBF = false;
+        for(let obj in this.buildings) if(this.buildings[obj].count >= 10) hasBF = true;
+
+        if(!hasBF) {
+            odds["Frenzy"] += odds["Building special"];
+            odds["Building special"] = 0;
+        }
+
         return odds;
     }
 }
-
 var MenuWrapper = {
     getMenuReference(classAttr, title) {
         let menu = document.getElementById("menu");
@@ -179,6 +230,41 @@ var MenuWrapper = {
     },
 }
 
+class Achievement {
+    constructor() {
+
+    }
+}
+
+class Upgrade {
+    unlocked = 0;
+    owned = 0;
+
+    constructor(name, obj) {
+        this.prerequisites = obj[0];
+        this.price = obj[1];
+        this.effect = obj[2];
+        if(obj[0].buildings) {
+            for(let building in obj[0].buildings) {
+                AutoCookie.instance.buildings[building].upgrades[name] = { need: obj[0].buildings[building], };
+            }
+        }
+    }
+}
+
+class Building {
+    upgrades = [];
+    achievements = {};
+    count = 0;
+    free = 0;
+
+    constructor(obj) {
+        this.basePrice = obj[0];
+        this.baseCps = obj[1];
+    }
+}
+
+
 // Hooks
 function ACMenu() {
     AutoCookie.oldUpdateMenu();
@@ -191,6 +277,7 @@ function ACMenu() {
         let gcStats = MenuWrapper.createSection(subsection, "Golden Cookie statistics", "nwrGCStatsButton", "showGCStats");
         if(AutoCookie.user.showGCStats) {
             MenuWrapper.createStatistic(gcStats, "Estimated time left", Game.shimmers.length > 0 ? "---" : Math.max(0, Math.ceil((AutoCookie.instance.estGCTime - Game.shimmerTypes.golden.time) / 30)));
+            MenuWrapper.createElement("br", gcStats);
             for(let i in AutoCookie.instance.gcOdds) MenuWrapper.createStatistic(gcStats, i, `${(AutoCookie.instance.gcOdds[i] * 100).toFixed(4)}%`);
         }
     } else if(Game.onMenu = "prefs") {
@@ -264,6 +351,7 @@ var init = function() {
 
         // Creating instance
         AutoCookie.instance.sync();
+        for(let i = 0; i < Game.ObjectsById.length; i++) new Building(Game.ObjectsById[i].name, Game.ObjectsById[i].basePrice, Game.ObjectsById[i].baseCps, Game.ObjectsById[i].amount, Game.ObjectsById[i].free);
 
         // Installing AutoCookie
         if(AutoCookie.MenuWrapper === undefined) AutoCookie.MenuWrapper = MenuWrapper;
