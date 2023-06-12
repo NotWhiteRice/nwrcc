@@ -2,7 +2,7 @@ function injectAutoCookie() {
 
 // Version settings
 var VERSION = "2.052";
-var REVISION = "0.95";
+var REVISION = "0.96";
 var DEVBUILD = "pre-alpha";
 
 var AutoCookie = undefined;
@@ -43,7 +43,7 @@ var Instance = {
     achievements: {},
 
     registerBuildings() { for(let obj in BUILDINGS) this.buildings[obj] = new Building(BUILDINGS[obj]); },
-    registerUpgrades() { for(let upg in UPGRADES) this.upgrades[obj] = new Upgrade(upg, UPGRADES[upg]); },
+    registerUpgrades() { for(let upg in UPGRADES) this.upgrades[upg] = new Upgrade(upg, UPGRADES[upg]); },
 
     sync() {
         {
